@@ -1,1 +1,3 @@
-<?php
+<div id="navbar-top">
+
+</div>
