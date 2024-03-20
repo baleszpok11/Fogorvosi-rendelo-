@@ -1,0 +1,33 @@
+.navbar-top {
+    overflow: auto;
+    background: aqua;
+    width: 100%;
+}
+
+.navbar-top a {
+    float: left;
+    margin-right: 10px;
+    border: 3px solid aliceblue;
+    padding: 10px;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.navbar-top a:Hover{
+    background: aquamarine;
+}
+
+.login-register {
+    float: right;
+}
+
+.logged{
+    float:right;
+    margin-right: 1cm;
+}
+
+body{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
