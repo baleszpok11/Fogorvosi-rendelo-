@@ -1,9 +1,37 @@
 <head>
+    <meta charset="UTF-8">
     <title>Regisztráció</title>
+    <link rel="stylesheet" href="style/style.css">
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
-<div>
-    <form class="register" action="functions/regFunction.php" method="POST">
+
+<div id="container">
+    <div class="header">
+
+        <div class="title">
+            <h1>Fogorvosi rendelő</h1>
+        </div>
+        <div class="info">
+
+            <div class="menu">
+                <ul>
+                    <li><a href="index.php">Kezdőlap</a></li>
+                    <li><a href="#">Áraink</a></li>
+                    <li><a href="#">Időpont foglalás</a></li>
+                    <li><a href="register.php">Regisztráció</a></li>
+                    <li><a href="login.php">Bejelentkezés</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    <hr>
+</div>
+
+<div class="register-login">
+    <form action="functions/regFunction.php" method="POST">
+        <h2>Regisztráció</h2>
         <label for="jmbg"></label>
         <input type="text" id="jmbg" name="jmbg" placeholder="JMBG" required><br><br>
         <br>
