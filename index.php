@@ -16,7 +16,7 @@ session_start();
         </div>
         <div class="info">
 
-            <div class="manu">
+            <div class="menu">
                 <ul>
                     <li><a href="index.php">Kezdőlap</a></li>
                     <li><a href="#">Áraink</a></li>
@@ -25,12 +25,9 @@ session_start();
                     <li><a href="login.php">Bejelentkezés</a></li>
                 </ul>
             </div>
-
         </div>
-
     </div>
     <hr>
-    <div class="middle"></div>
 
     </div>
 <hr>
