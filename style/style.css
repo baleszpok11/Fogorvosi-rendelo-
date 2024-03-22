@@ -6,6 +6,8 @@
 body{
     background-color: white;
     font-family: Georgia;
+    padding: 0;
+    margin: 0;
 }
 hr{
     background-color: rgb(26, 255, 255);
@@ -120,7 +122,7 @@ footer{
 .title h1 {
     animation: Title_decor 3.5s infinite;
 }
-.manu ul{
+.menu ul{
     display: flex;
     margin-left: 20px;
 }
@@ -128,17 +130,18 @@ li{
     list-style: none;
     margin-left: 5px;
 }
-.manu li a{
+.menu li a{
     font-size: 18px;
     margin: 10px;
     color: black;
 }
-.manu a:hover,.manu li:hover{
+.menu a:hover,.menu li:hover{
     color: rgb(0, 0, 0);
     transform: scale(1.1);
     transition: all .3s;
 }
-.content_manu{
+
+.content_menu{
     border-radius: 20px;
     margin-top: 10px;
     margin: auto;
@@ -149,7 +152,6 @@ li{
 }
 .middle
 {
-    height: 90%;
     border-radius: 200px;
     margin-top: 10px;
     margin: auto;
@@ -160,6 +162,12 @@ li{
     /*background-image: url("images/dentist.jpg"); */
     ;
 }
-.register{
-    
+
+form {
+    text-align: center;
+}
+
+form h2{
+    margin-bottom: 20px;
+    font-family: Baghdad, serif;
 }
