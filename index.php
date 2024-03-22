@@ -12,7 +12,7 @@ session_start();
     if (!isset($_SESSION['jmbg'])) {
         echo '<div class="login-register">
             <a href="register.php">Regisztráció</a>
-            <a href="login.php">Bejelentkezés</a>
+            <a href="login.php">Bejel</a>
     </div>';
     } else {
         echo '<div class ="logged"> <p>' . $_SESSION["jmbg"] . '</p>';
