@@ -3,7 +3,7 @@
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
 <div>
-    <form action="functions/regFunction.php" method="POST">
+    <form class="register" action="functions/regFunction.php" method="POST">
         <label for="jmbg"></label>
         <input type="text" id="jmbg" name="jmbg" placeholder="JMBG" required><br><br>
         <br>
