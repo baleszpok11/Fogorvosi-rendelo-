@@ -2,7 +2,7 @@
     <title>Bejelentkezés</title>
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
-<form action="functions/logFunction.php" method="post">
+<form class="register-login" action="functions/logFunction.php" method="post">
     <label for="email"></label>
     <input type="email" id="email" name="email" placeholder="Email" required><br><br>
 
