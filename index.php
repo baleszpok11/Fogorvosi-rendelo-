@@ -21,8 +21,8 @@ session_start();
                     <li><a href="index.php">Kezdőlap</a></li>
                     <li><a href="#">Áraink</a></li>
                     <li><a href="#">Időpont foglalás</a></li>
-                    <li><a href="login.php">Regisztráció</a></li>
-                    <li><a href="register.php">Bejelentkezés</a></li>
+                    <li><a href="register.php">Regisztráció</a></li>
+                    <li><a href="login.php">Bejelentkezés</a></li>
                 </ul>
             </div>
 
