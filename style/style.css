@@ -157,6 +157,9 @@ li{
     padding: 10px;
     display: flex;
     flex-wrap: wrap;
-    background-image: url ("images/dentist.jpg");
+    /*background-image: url("images/dentist.jpg"); */
     ;
+}
+.register{
+    
 }
