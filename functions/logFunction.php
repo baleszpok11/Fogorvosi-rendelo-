@@ -16,6 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
             $_SESSION['jmbg'] = $row['jmbg'];
+            $_SESSION['firstName'] = $row['firstName'];
+            $_SESSION['lastName'] = $row['lastName'];
+            $_SESSION['phoneNumber'] = $row['phoneNumber'];
+            $_SESSION['email'] = $row['email'];
 
             if ($remember_me) {
                 $token = bin2hex(random_bytes(32));
@@ -27,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../index.php");
             exit();
         } else {
-            $error_message = "Invalid email or password.";
+            $error_message = "Helytelen jelszó vagy email cím.";
         }
     } else {
-        $error_message = "Invalid email or password.";
+        $error_message = "Helytelen jelszó vagy email cím.";
     }
 }
 
