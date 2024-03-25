@@ -5,6 +5,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Fogorvosi rendelő</title>
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
 <body>
@@ -15,8 +16,8 @@ if(!isset($_SESSION['jmbg'])){
     echo '<a href="register.php">Register</a>
 <a href="login.php">Login</a>';
 } else {
-    echo $_SESSION['jmbg'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'];
-    echo '<form action="functions/logOutFunction.php" method="post"> <input type="submit" value="Kijelentkezés"> </form>';
+    echo $_SESSION['jmbg'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'] . ' ';
+    echo '<a href="functions/logOutFunction.php">Kijelentkezés</a>';
 }
 ?>
 <!--<a href="https://www.google.com/maps?authuser=3" target="_blank">Megtalálsz minket ITT</a>
