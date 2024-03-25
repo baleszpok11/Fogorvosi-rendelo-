@@ -5,9 +5,9 @@
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
 <body>
-    <a href="index.php">Kezdőlap</a>
-    <a href="register.php">Regisztráció</a>
-    <a href="login.php">Bejelentkezés</a>
+<a href="index.php">Kezdőlap</a>
+<a href="register.php">Regisztráció</a>
+<a href="login.php">Bejelentkezés</a>
 <form action="functions/regFunction.php" method="POST" onsubmit="return validateForm()">
     <h2>Regisztráció</h2>
     <label for="jmbg"></label>
@@ -28,11 +28,13 @@
     <br>
     <label for="password"></label>
     <input type="password" id="password" name="password" placeholder="Jelszó" required><br><br>
-    <small id="passwordHelpBlock" style="display: none; color: red;">A jelszónak legalább egy számot, egy nagybetűt, és egy speciális karaktert (pl. !) kell tartalmaznia.</small>
+    <small id="passwordHelpBlock" style="display: none; color: red;">A jelszónak legalább egy számot, egy nagybetűt, és
+        egy speciális karaktert (pl. !) kell tartalmaznia.</small>
     <br>
     <label for="passwordConfirm"></label>
     <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Jelszó megerősítése" required>
-    <small id="passwordConfirmHelpBlock" style="display: none; color: red;">A jelszó és a megerősítés nem egyezik meg.</small><br><br>
+    <small id="passwordConfirmHelpBlock" style="display: none; color: red;">A jelszó és a megerősítés nem egyezik
+        meg.</small><br><br>
     <br>
     <input type="submit" value="Regisztráció" name="register" id="registerBtn" disabled>
 </form>
