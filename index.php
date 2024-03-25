@@ -9,12 +9,14 @@ session_start();
 </head>
 <body>
 <a href="index.php">Index</a>
+<a href="appointment.php">Időpont</a>
 <?php
 if(!isset($_SESSION['jmbg'])){
     echo '<a href="register.php">Register</a>
 <a href="login.php">Login</a>';
 } else {
-    echo $_SESSION['jmbg'];
+    echo $_SESSION['jmbg'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'];
+    echo '<form action="functions/logOutFunction.php" method="post"> <input type="submit" value="Kijelentkezés"> </form>';
 }
 ?>
 <!--<a href="https://www.google.com/maps?authuser=3" target="_blank">Megtalálsz minket ITT</a>
