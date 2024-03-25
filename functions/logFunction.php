@@ -1,7 +1,5 @@
 <?php
 
-
-// Start session
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,15 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../index.php");
             exit();
         } else {
-            // Authentication failed
             $error_message = "Invalid email or password.";
         }
     } else {
-        // User not found
         $error_message = "Invalid email or password.";
     }
 }
 
-// Close database connection
 $conn->close();
 ?>
