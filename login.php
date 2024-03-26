@@ -24,10 +24,9 @@
     <label for="password"></label>
     <input type="password" id="password" name="password" placeholder="Jelszó" required><br><br>
 
-    <label for="remember_me">
-        Remember Me
+    <label for="remember_me">Bejelentkezve maradok</label>
         <input type="checkbox" id="remember_me" name="remember_me">
-    </label><br><br>
+    <br><br>
 
 
     <input type="submit" value="Login">
