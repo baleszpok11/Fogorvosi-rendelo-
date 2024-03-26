@@ -11,11 +11,11 @@ session_start();
 <body>
 <div class="navbar">
     <ul>
-        <li><a href="index.php">Kezdőlap</a></li>
+        <li><a href="index.php">Kezdőoldal</a></li>
 <?php
 if(!isset($_SESSION['jmbg'])){
-    echo '<li><a href="register.php">Register</a></li>
-<li><a href="login.php">Login</a></li>';
+    echo '<li><a href="register.php">Regisztráció</a></li>
+<li><a href="login.php">Bejelentkezés</a></li>';
 } else {
     echo $_SESSION['jmbg'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'] . ' ';
     echo '<li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>';
