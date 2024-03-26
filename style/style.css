@@ -79,13 +79,12 @@ a:hover {
 
 .navbar ul{
     display: flex;
-    margin-left: 20px;
     list-style-type: none;
 }
 .navbar li a{
     font-size: 18px;
-    margin: 10px;
     color: black;
+    margin: 10px;
 }
 .navbar a:hover,.manu li:hover{
     color: rgb(0, 0, 0);
