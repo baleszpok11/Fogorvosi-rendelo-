@@ -2,6 +2,13 @@
     <title>Bejelentkezés</title>
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
+<div class="navbar">
+    <ul>
+        <li><a href="index.php">Kezdőoldal</a></li>
+        <li><a href="register.php">Regisztráció</a></li>
+        <li><a href="login.php">Bejelentkezés</a></li>
+    </ul>
+</div>
 <form action="functions/logFunction.php" method="post">
     <label for="email"></label>
     <input type="email" id="email" name="email" placeholder="Email" required><br><br>
