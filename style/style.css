@@ -71,6 +71,12 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.navbar{
+    padding: 10px;
+    margin: 10px;
+}
+
 .navbar ul{
     display: flex;
     margin-left: 20px;
