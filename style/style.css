@@ -72,11 +72,6 @@ a:hover {
     text-decoration: underline;
 }
 
-.navbar{
-    padding: 10px;
-    margin: 10px;
-}
-
 .navbar ul{
     display: flex;
     list-style-type: none;
@@ -107,10 +102,12 @@ a:hover {
     margin-left: 21%;
     margin-bottom: 20px;
 }
-    .navbar{
+
+.navbar{
         display: flex;
-        margin-left: 35%;
-    }
+        padding: 10px;
+        margin: 10px;
+}
 
 
 .header .page{
