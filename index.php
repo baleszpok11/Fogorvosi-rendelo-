@@ -9,15 +9,16 @@ session_start();
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
 <body>
-<a href="index.php">Index</a>
-<a href="appointment.php">Időpont</a>
+<div class="navbar">
+    <ul>
+        <li><a href="index.php">Kezdőlap</a></li>
 <?php
 if(!isset($_SESSION['jmbg'])){
-    echo '<a href="register.php">Register</a>
-<a href="login.php">Login</a>';
+    echo '<li><a href="register.php">Register</a></li>
+<li><a href="login.php">Login</a></li>';
 } else {
     echo $_SESSION['jmbg'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'] . ' ';
-    echo '<a href="functions/logOutFunction.php">Kijelentkezés</a>';
+    echo '<li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>';
 }
 ?>
 <!--<a href="https://www.google.com/maps?authuser=3" target="_blank">Megtalálsz minket ITT</a>
