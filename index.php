@@ -5,7 +5,6 @@ session_start();
     <meta charset="UTF-8">
     <title>Fogorvosi rendelő</title>
     <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
 <body>
