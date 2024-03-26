@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
 </head>
+<body>
+<div class="navbar">
+    <ul>
+        <li><a href="index.php">Kezdőlap</a></li>
+        <li><a href="register.php">Regisztráció</a></li>
+        <li><a href="login.php">Bejelentkezés</a></li>
+    </ul>
+</div>
 <div class="header">
 
     <div class="title">
         <h1>Regisztráció</h1>
     </div>
-<div class="navbar">
-<ul>
-    <li><a href="index.php">Kezdőlap</a></li>
-    <li><a href="register.php">Regisztráció</a></li>
-    <li><a href="login.php">Bejelentkezés</a></li>
-</ul>
-</div>
 </div>
     <div class="container">
 <form action="functions/regFunction.php" method="POST" onsubmit="return validateForm()">
