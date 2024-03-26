@@ -8,7 +8,7 @@
 <body>
 <div class="navbar">
     <ul>
-        <li><a href="index.php">Kezdőlap</a></li>
+        <li><a href="index.php">Kezdőoldal</a></li>
         <li><a href="register.php">Regisztráció</a></li>
         <li><a href="login.php">Bejelentkezés</a></li>
     </ul>
