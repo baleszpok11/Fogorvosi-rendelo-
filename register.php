@@ -3,23 +3,16 @@
     <title>Regisztráció</title>
     <link rel="stylesheet" href="style/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="style/favicon_io/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
+    <script src="functions/register.js"></script>
 </head>
 <body>
-<div class="navbar">
     <ul>
         <li><a href="index.php">Kezdőoldal</a></li>
         <li><a href="register.php">Regisztráció</a></li>
         <li><a href="login.php">Bejelentkezés</a></li>
     </ul>
-</div>
-<div class="header">
-
-    <div class="title">
-        <h1>Regisztráció</h1>
-    </div>
-</div>
-    <div class="container">
+    <h1>Regisztráció</h1>
 <form action="functions/regFunction.php" method="POST" onsubmit="return validateForm()">
     <label for="jmbg"></label>
     <input type="text" id="jmbg" name="jmbg" placeholder="JMBG" required><br><br>
@@ -49,6 +42,4 @@
     <br>
     <input type="submit" value="Regisztráció" name="register" id="registerBtn" disabled>
 </form>
-</div>
-<script src="functions/register.js"></script>
 </body>
