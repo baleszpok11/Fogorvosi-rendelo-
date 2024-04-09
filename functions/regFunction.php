@@ -17,7 +17,7 @@ if(isset($_POST)){
         exit();
     }
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-    $stmt = $conn->prepare("INSERT INTO patient (jmbg ,firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO Patient (patientID ,firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $patientID, $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
