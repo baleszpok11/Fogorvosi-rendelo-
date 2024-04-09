@@ -32,9 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             $error_message = "Helytelen jelszó vagy email cím.";
+            echo  $error_message;
         }
     } else {
         $error_message = "Helytelen jelszó vagy email cím.";
+        echo $error_message;
     }
 }
 

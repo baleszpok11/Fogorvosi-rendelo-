@@ -14,6 +14,6 @@ if(!isset($_SESSION['patientID'])){
 <a href="login.php">Bejelentkezés</a>';
 } else {
     echo $_SESSION['patientID'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'] . ' ';
-    echo '';
+    echo '<a href="appointment.php">Időpont</a>';
 }
 ?>

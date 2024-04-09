@@ -14,9 +14,6 @@
     </ul>
     <h1>Regisztráció</h1>
 <form action="functions/regFunction.php" method="POST" onsubmit="return validateForm()">
-    <label for="jmbg"></label>
-    <input type="text" id="jmbg" name="jmbg" placeholder="JMBG" required><br><br>
-    <br>
     <label for="firstName"></label>
     <input type="text" id="firstName" name="firstName" placeholder="Keresztnév" required><br><br>
     <br>
