@@ -4,7 +4,7 @@ if(isset($_POST)){
     global $conn;
     $lastName = $_POST["lastName"];
     $firstName = $_POST["firstName"];
-    $jmbg = $_POST["jmbg"];
+    $patientID = $_POST["patientID"];
     $phoneNumber = $_POST["phoneNumber"];
     $password = $_POST["password"];
     $passwordConfirmation = $_POST["passwordConfirm"];
@@ -17,8 +17,8 @@ if(isset($_POST)){
         exit();
     }
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-    $stmt = $conn->prepare("INSERT INTO Patient (jmbg ,firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $jmbg, $firstName, $lastName, $phoneNumber, $email, $hashed_password);
+    $stmt = $conn->prepare("INSERT INTO patient (jmbg ,firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $patientID, $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
         echo '<script>alert("A regisztráció sikeres volt!"); window.location.href = "../index.php";</script>';
