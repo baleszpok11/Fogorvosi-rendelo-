@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            $_SESSION['jmbg'] = $row['jmbg'];
+            $_SESSION['patientID'] = $row['patientID'];
             $_SESSION['firstName'] = $row['firstName'];
             $_SESSION['lastName'] = $row['lastName'];
             $_SESSION['phoneNumber'] = $row['phoneNumber'];
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($remember_me) {
                 $token = bin2hex(random_bytes(32));
                 setcookie('remember_me_cookie', $token, time() + (86400 * 30), "/"); // 30 napos cookie
-                $sql = "UPDATE Patient SET token = '$token' WHERE jmbg = " . $row['jmbg'];
+                $sql = "UPDATE Patient SET remember = '$token' WHERE jmbg = " . $row['patientID'];
                 $conn->query($sql);
             }
 
