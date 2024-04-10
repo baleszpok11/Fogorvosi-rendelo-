@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($remember_me) {
                 $token = bin2hex(random_bytes(32));
                 setcookie('remember_me_cookie', $token, time() + (86400 * 30), "/"); // 30 napos cookie
-                $sql = "UPDATE Patient SET remember = '$token' WHERE jmbg = " . $row['patientID'];
+                $sql = "UPDATE Patient SET remember = '$token' WHERE patientID = " . $row['patientID'];
                 $conn->query($sql);
             }
 
