@@ -38,7 +38,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Helytelen jelszó vagy email cím.";
         echo $error_message;
     }
+    $conn->close();
 }
-
-$conn->close();
-?>

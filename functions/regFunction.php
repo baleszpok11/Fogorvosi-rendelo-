@@ -8,24 +8,22 @@ if(isset($_POST)){
     $password = $_POST["password"];
     $passwordCon = $_POST["passwordConfirm"];
     $email = $_POST["email"];
-    echo $password, $passwordCon;
+
     if($password !== $passwordCon)
     {
-        echo '<script>alert("Password confirmation does not match"); window.location.href = "../register.php";</script>';
-        $conn->close();
+        header("Location: ../register.php?message=Jelszó nem egyezik.");
         exit();
     }
+
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
     $stmt = $conn->prepare("INSERT INTO Patient (firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
-        echo '<script>alert("A regisztráció sikeres volt!"); window.location.href = "../index.php";</script>';
-        $conn->close();
+        header("Location: ../index.php?message=Regisztráció sikeres volt.");
         exit();
     } else {
-        echo '<script>alert("A regisztáció sikertelen volt!"); window.location.href = "../index.php";</script>';
-        $conn->close();
+        header("Location: ../index.php?message=Regisztráció sikertelen volt.");
         exit();
     }
 }

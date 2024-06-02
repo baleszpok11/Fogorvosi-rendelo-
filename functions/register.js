@@ -19,31 +19,22 @@ function validateForm() {
     var validPassword = numberRegex.test(password) && uppercaseRegex.test(password) && specialCharRegex.test(password);
     var passwordMatch = password === passwordConfirm;
 
-    if (!validEmail) {
-        emailHelpBlock.style.display = "block";
-    } else {
-        emailHelpBlock.style.display = "none";
+    // Show or hide email validation message
+    if (emailInput.value.trim() !== "") {
+        emailHelpBlock.style.display = validEmail ? "none" : "block";
     }
 
-    if (!validPassword) {
-        passwordHelpBlock.style.display = "block";
-    } else {
-        passwordHelpBlock.style.display = "none";
+    if (passwordInput.value.trim() !== "") {
+        passwordHelpBlock.style.display = validPassword ? "none" : "block";
     }
 
-    if (!passwordMatch) {
-        passwordConfirmHelpBlock.style.display = "block";
-    } else {
-        passwordConfirmHelpBlock.style.display = "none";
+    if (passwordConfirmInput.value.trim() !== "") {
+        passwordConfirmHelpBlock.style.display = passwordMatch ? "none" : "block";
     }
 
-    if (validEmail && validPassword && passwordMatch) {
-        registerBtn.disabled = false;
-        return true;
-    } else {
-        registerBtn.disabled = true;
-        return false;
-    }
+    registerBtn.disabled = !(validEmail && validPassword && passwordMatch);
+
+    return validEmail && validPassword && passwordMatch;
 }
 
 window.addEventListener("load", function () {
