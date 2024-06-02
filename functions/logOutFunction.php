@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'connection.php';
+require 'db-config.php';
 global $conn;
 // cookie törlése
 if (isset($_COOKIE['remember_me_cookie'])) {

@@ -1,6 +1,6 @@
 <?php
 if(isset($_POST)){
-    require 'connection.php';
+    require 'db-config.php';
     global $conn;
     $lastName = $_POST["lastName"];
     $firstName = $_POST["firstName"];

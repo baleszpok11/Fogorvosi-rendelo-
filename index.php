@@ -13,6 +13,7 @@ if(!isset($_SESSION['patientID'])){
     echo '<a href="register.php">Regisztráció</a>
 <a href="login.php">Bejelentkezés</a>';
 } else {
+    echo '<a href="app.php">Ido</a>';
     echo $_SESSION['patientID'] . ' ' . $_SESSION['firstName'] . ' ' . $_SESSION['lastName'] . ' ';
     echo '<a href="functions/logOutFunction.php">Kijelentkezés</a>';
 }

@@ -3,7 +3,7 @@
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require 'connection.php';
+    require 'db-config.php';
     global $conn;
     $email = $_POST['email'];
     $password = $_POST['password'];
