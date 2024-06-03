@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,8 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $remember_me = isset($_POST['remember_me']) ? true : false;
 
-    $sql = "SELECT * FROM Patient WHERE email = '$email'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM Patient WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
@@ -23,20 +25,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($remember_me) {
                 $token = bin2hex(random_bytes(32));
-                setcookie('remember_me_cookie', $token, time() + (86400 * 30), "/"); // 30 napos cookie
-                $sql = "UPDATE Patient SET remember = '$token' WHERE patientID = " . $row['patientID'];
-                $conn->query($sql);
+                setcookie('remember_me_cookie', $token, time() + (86400 * 30), "/"); // 30 days cookie
+                $sql = "UPDATE Patient SET remember = ? WHERE patientID = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("si", $token, $row['patientID']);
+                $stmt->execute();
             }
 
             header("Location: ../index.php");
             exit();
         } else {
             $error_message = "Helytelen jelszó vagy email cím.";
-            echo  $error_message;
         }
     } else {
         $error_message = "Helytelen jelszó vagy email cím.";
-        echo $error_message;
     }
+    $stmt->close();
     $conn->close();
+
+    // Redirect back to login page with error message
+    header("Location: ../login.php?error=" . urlencode($error_message));
+    exit();
+} else {
+    header("Location: ../login.php");
+    exit();
 }

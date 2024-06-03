@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST)){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     require 'db-config.php';
     global $conn;
     $lastName = $_POST["lastName"];
@@ -9,9 +9,8 @@ if(isset($_POST)){
     $passwordCon = $_POST["passwordConfirm"];
     $email = $_POST["email"];
 
-    if($password !== $passwordCon)
-    {
-        header("Location: ../register.php?message=Jelszó nem egyezik.");
+    if ($password !== $passwordCon) {
+        header("Location: ../register.php?message=" . urlencode("Jelszavak nem egyeznek.") . "&type=error");
         exit();
     }
 
@@ -20,10 +19,10 @@ if(isset($_POST)){
     $stmt->bind_param("sssss", $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
-        header("Location: ../index.php?message=Regisztráció sikeres volt.");
+        header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt.") . "&type=success");
         exit();
     } else {
-        header("Location: ../index.php?message=Regisztráció sikertelen volt.");
+        header("Location: ../index.php?message=" . urlencode("Regisztráció sikertelen volt.") . "&type=error");
         exit();
     }
 }
