@@ -8,11 +8,12 @@ if(isset($_POST)){
     $password = $_POST["password"];
     $passwordCon = $_POST["passwordConfirm"];
     $email = $_POST["email"];
-    $username = $_POST["username"];
 
-    if($password !== $passwordCon)
-    {
-        header("Location: ../register.php?message=Jelszó nem egyezik.");
+    // Extract username from email
+    $username = strstr($email, '@', true);
+
+    if($password !== $passwordCon) {
+        header("Location: ../register.php?message=" . urlencode("Jelszó nem egyezik.") . "&type=alert");
         exit();
     }
 
@@ -21,10 +22,10 @@ if(isset($_POST)){
     $stmt->bind_param("ssssss", $username, $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
-        header("Location: ../index.php?message=Regisztráció sikeres volt.");
+        header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt.") . "&type=success");
         exit();
     } else {
-        header("Location: ../index.php?message=Regisztráció sikertelen volt.");
+        header("Location: ../index.php?message=" . urlencode("Regisztráció sikertelen volt.") . "&type=alert");
         exit();
     }
 }

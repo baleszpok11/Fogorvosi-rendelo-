@@ -3,13 +3,22 @@ session_start();
 require 'db-config.php';
 global $conn;
 // cookie törlése
-if (isset($_COOKIE['remember_me_cookie'])) {
-    unset($_COOKIE['remember_me_cookie']);
-    setcookie('remember_me_cookie', '', ['expires' => time() - 3600, 'path' => '/']);
-    $sql = "UPDATE Patient SET remember = NULL WHERE patientID = " . $_SESSION['patientID'];
-    $conn->query($sql);
+if($_SESSION['patientID']) {
+    if (isset($_COOKIE['remember_me_cookie'])) {
+        unset($_COOKIE['remember_me_cookie']);
+        setcookie('remember_me_cookie', '', ['expires' => time() - 3600, 'path' => '/']);
+        $sql = "UPDATE Patient SET remember = NULL WHERE patientID = " . $_SESSION['patientID'];
+        $conn->query($sql);
+    }
 }
-
+if($_SESSION['doctorID']) {
+    if (isset($_COOKIE['remember_me_cookie'])) {
+        unset($_COOKIE['remember_me_cookie']);
+        setcookie('remember_me_cookie', '', ['expires' => time() - 3600, 'path' => '/']);
+        $sql = "UPDATE Doctor SET remember = NULL WHERE patientID = " . $_SESSION['doctorID'];
+        $conn->query($sql);
+    }
+}
 // session törlése
 $_SESSION = array();
 

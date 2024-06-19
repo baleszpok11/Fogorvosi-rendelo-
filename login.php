@@ -1,6 +1,5 @@
 <?php
 session_start();
-$error_message = isset($_GET['error']) ? $_GET['error'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +12,9 @@ $error_message = isset($_GET['error']) ? $_GET['error'] : '';
     <style>
         body {
             padding-top: 70px;
+        }
+        .alert-container {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -33,7 +35,7 @@ $error_message = isset($_GET['error']) ? $_GET['error'] : '';
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="index.php">Kezdőoldal</a></li>
-                <?php if (!isset($_SESSION['patientID'])): ?>
+                <?php if (!isset($_SESSION['patientID']) || !isset($_SESSION['doctorID'])): ?>
                     <li><a href="register.php">Regisztráció</a></li>
                     <li class="active"><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
@@ -56,10 +58,7 @@ $error_message = isset($_GET['error']) ? $_GET['error'] : '';
 </nav>
 <div class="container">
     <h1>Bejelentkezés</h1>
-    <?php if (!empty($error_message)): ?>
-        <div class="alert alert-danger" role="alert"><?php echo htmlspecialchars($error_message); ?></div>
-    <?php endif; ?>
-    <form action="functions/logFunction.php" method="post">
+    <form id="loginForm" action="functions/logFunction.php" method="post">
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
@@ -67,6 +66,13 @@ $error_message = isset($_GET['error']) ? $_GET['error'] : '';
         <div class="form-group">
             <label for="password">Jelszó:</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Jelszó" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Szerep:</label>
+            <select class="form-control" id="role" name="role" required>
+                <option value="user">Felhasználó</option>
+                <option value="doctor">Orvos</option>
+            </select>
         </div>
         <div class="checkbox">
             <label><input type="checkbox" id="remember_me" name="remember_me"> Bejelentkezve maradok</label>
@@ -77,5 +83,17 @@ $error_message = isset($_GET['error']) ? $_GET['error'] : '';
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        $('#loginForm').submit(function(e) {
+            var role = $('#role').val();
+            if (role === 'doctor') {
+                $(this).attr('action', 'functions/logDoctor.php');
+            } else {
+                $(this).attr('action', 'functions/logFunction.php');
+            }
+        });
+    });
+</script>
 </body>
 </html>
