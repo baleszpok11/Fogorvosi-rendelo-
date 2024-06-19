@@ -50,8 +50,8 @@ function sendVerificationEmail($email, $token)
         $mail->isSMTP();
         $mail->Host = 'smtp.mailjet.com'; // Mailjet SMTP server
         $mail->SMTPAuth = true;
-        $mail->Username = 'your_mailjet_username'; // Mailjet username
-        $mail->Password = 'your_mailjet_password'; // Mailjet password
+        $mail->Username = ''; // Mailjet username
+        $mail->Password = ''; // Mailjet password
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
