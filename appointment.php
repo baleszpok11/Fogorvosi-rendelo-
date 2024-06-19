@@ -44,7 +44,8 @@ if (!is_null($auth) && $auth !== '') {
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Navigáció váltása</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -57,7 +58,9 @@ if (!is_null($auth) && $auth !== '') {
                 <li><a href="index.php">Kezdőoldal</a></li> <!-- Az Ön linkei itt -->
                 <li><a href="appointment.php">Időpont foglalás</a></li> <!-- Az Ön linkei itt -->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?><span class="caret"></span></a> <!-- Az Ön neve itt -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?><span
+                                class="caret"></span></a> <!-- Az Ön neve itt -->
                     <ul class="dropdown-menu">
                         <li><a href="#">Profil</a></li>
                         <li><a href="#">Beállítások</a></li>
@@ -150,17 +153,17 @@ if (!is_null($auth) && $auth !== '') {
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         let flatpickrInstance;
-        $('#doctor').change(function() {
+        $('#doctor').change(function () {
             var doctorId = $(this).val();
             if (doctorId) {
                 $.ajax({
                     url: 'functions/get_doctor_worktime.php',
                     type: 'GET',
-                    data: { doctor_id: doctorId },
+                    data: {doctor_id: doctorId},
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
                         if (flatpickrInstance) {
                             flatpickrInstance.destroy();
                         }
@@ -188,7 +191,7 @@ if (!is_null($auth) && $auth !== '') {
                         flatpickrInstance = flatpickr("#appointment_day", {
                             dateFormat: "Y-m-d",
                             disable: [
-                                function(date) {
+                                function (date) {
                                     return !enabledDays.includes(date.getDay());
                                 }
                             ],
@@ -196,19 +199,19 @@ if (!is_null($auth) && $auth !== '') {
                             maxDate: new Date().fp_incr(30) // 1 month in the future
                         });
 
-                        $('#appointment_day').change(function() {
+                        $('#appointment_day').change(function () {
                             var selectedDate = $(this).val();
                             $.ajax({
                                 url: 'functions/get_booked_times.php',
                                 type: 'GET',
-                                data: { doctor_id: doctorId, date: selectedDate },
+                                data: {doctor_id: doctorId, date: selectedDate},
                                 dataType: 'json',
-                                success: function(data) {
+                                success: function (data) {
                                     var bookedSlotsTable = $('#bookedSlots');
                                     bookedSlotsTable.empty();
 
                                     if (data && data.length > 0) {
-                                        data.forEach(function(slot) {
+                                        data.forEach(function (slot) {
                                             bookedSlotsTable.append('<tr><td>' + slot + '</td></tr>');
                                         });
                                     } else {

@@ -1,18 +1,20 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use \Mailjet\Resources;
+
+use Mailjet\Resources;
 
 require 'vendor/autoload.php';
 
-class Mailer {
+class Mailer
+{
     private $mailjet;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->mailjet = new \Mailjet\Client('81ea24ce778b6e7ecc44af9aaaca1da3', '418bade66c7e26bbc9fb672efadd6512', true, ['version' => 'v3.1']);
     }
 
-    public function sendMailjet($to, $subject, $body) {
+    public function sendMailjet($to, $subject, $body)
+    {
         $message = [
             'Messages' => [
                 [
@@ -36,4 +38,5 @@ class Mailer {
         return $response->success();
     }
 }
+
 ?>

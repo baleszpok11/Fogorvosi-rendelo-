@@ -21,7 +21,8 @@ $message = $_GET['message'] ?? '';
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -40,8 +41,10 @@ $message = $_GET['message'] ?? '';
                     <li><a href="appointment.php">Időpont foglalás</a></li>
                     <li><a href="doctors.php">Orvosaink</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span class="caret"></span>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span
+                                    class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="active"><a href="profile.php">Profil</a></li>
@@ -65,14 +68,16 @@ $message = $_GET['message'] ?? '';
                 <div class="form-group">
                     <label for="inputPassword" class="col-sm-3 control-label">Új jelszó</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" id="inputPassword" name="newPassword" placeholder="Új jelszó">
+                        <input type="password" class="form-control" id="inputPassword" name="newPassword"
+                               placeholder="Új jelszó">
                         <small id="passwordHelpBlock" class="form-text text-danger"></small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPhoneNumber" class="col-sm-3 control-label">Telefonszám</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="inputPhoneNumber" name="phoneNumber" placeholder="Telefonszám">
+                        <input type="text" class="form-control" id="inputPhoneNumber" name="phoneNumber"
+                               placeholder="Telefonszám">
                     </div>
                 </div>
                 <div class="form-group">
@@ -92,8 +97,8 @@ $message = $_GET['message'] ?? '';
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#profileForm').submit(function(e) {
+    $(document).ready(function () {
+        $('#profileForm').submit(function (e) {
             e.preventDefault();
 
             var password = $('#inputPassword').val();
@@ -110,7 +115,7 @@ $message = $_GET['message'] ?? '';
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     alert(response.message);
                     if (response.success) {
                         $('#inputPassword').val('');
@@ -118,7 +123,7 @@ $message = $_GET['message'] ?? '';
                         $('#inputEmail').val('');
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                     alert('Hiba történt a kérés feldolgozása közben. Kérjük, próbálja újra.');
                 }

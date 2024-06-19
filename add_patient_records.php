@@ -26,7 +26,8 @@ if (!isset($_SESSION['doctorID'])) {
             <li><a href="index.php">Kezdőoldal</a></li>
             <li><a href="appointment.php">Időpont foglalás</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -50,7 +51,8 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="patientID" class="col-sm-3 control-label">Páciens ID</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID" required>
+                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID"
+                               required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,7 +64,8 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="procedureDetails" class="col-sm-3 control-label">Eljárás részletei</label>
                     <div class="col-sm-9">
-                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4" required></textarea>
+                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4"
+                                  required></textarea>
                     </div>
                 </div>
                 <div class="form-group">

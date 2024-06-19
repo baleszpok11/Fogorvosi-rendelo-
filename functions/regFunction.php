@@ -1,8 +1,8 @@
 <?php
 require '../vendor/autoload.php'; // Ensure PHPMailer is loaded
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 if (isset($_POST)) {
     require 'db-config.php';
@@ -41,7 +41,8 @@ if (isset($_POST)) {
     }
 }
 
-function sendVerificationEmail($email, $token) {
+function sendVerificationEmail($email, $token)
+{
     $mail = new PHPMailer(true);
 
     try {
@@ -61,7 +62,7 @@ function sendVerificationEmail($email, $token) {
         // Content
         $mail->isHTML(true);
         $mail->Subject = 'Email megerősítése';
-        $mail->Body    = "Kérjük, kattintson a következő linkre az email cím megerősítéséhez: <a href='http://localhost:8000/Fogorvosi-rendelo-/verify.php?token=$token'>Megerősítés</a>";
+        $mail->Body = "Kérjük, kattintson a következő linkre az email cím megerősítéséhez: <a href='http://localhost:8000/Fogorvosi-rendelo-/verify.php?token=$token'>Megerősítés</a>";
 
         $mail->send();
     } catch (Exception $e) {

@@ -28,8 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['doctorID'])) {
     try {
         $stmt = $conn->prepare("INSERT INTO PatientRecords (patientID, doctorID, procedureDate, procedureDetails, notes, procedureID) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("iisssi", $patientID, $doctorID, $procedureDate, $procedureDetails, $notes, $procedureID);
-    }
-    catch(Exception $e) {
+    } catch (Exception $e) {
         header("Location: ../add_patient_records.php?message=" . urlencode("Hiba történt a kezelési adat hozzáadása közben: " . $e->getMessage()));
         exit();
     }
