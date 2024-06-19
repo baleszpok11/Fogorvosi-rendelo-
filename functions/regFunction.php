@@ -1,71 +1,37 @@
 <?php
-require '../vendor/autoload.php'; // Ensure PHPMailer is loaded
-
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-
-if (isset($_POST)) {
+if(isset($_POST)){
     require 'db-config.php';
-    global $conn;
+    require 'send_verification_email.php';
 
+    global $conn;
     $firstName = $_POST["firstName"];
     $lastName = $_POST["lastName"];
     $phoneNumber = $_POST["phoneNumber"];
     $password = $_POST["password"];
     $passwordCon = $_POST["passwordConfirm"];
     $email = $_POST["email"];
-
-    // Extract username from email
     $username = strstr($email, '@', true);
 
-    if ($password !== $passwordCon) {
+    if($password !== $passwordCon) {
         header("Location: ../register.php?message=" . urlencode("Jelszó nem egyezik.") . "&type=alert");
         exit();
     }
 
-    // Generate unique token
-    $token = bin2hex(random_bytes(16));
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    $token = bin2hex(random_bytes(16));
 
     $stmt = $conn->prepare("INSERT INTO Patient (userName, firstName, lastName, phoneNumber, email, password, auth) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssss", $username, $firstName, $lastName, $phoneNumber, $email, $hashed_password, $token);
 
     if ($stmt->execute() === TRUE) {
-        // Send verification email
-        sendVerificationEmail($email, $token);
-        header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt. Kérjük, ellenőrizze az email fiókját a megerősítéshez.") . "&type=success");
+        if (send_verification_email($email, $token)) {
+            header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt. Ellenőrizze az email címét a megerősítéshez.") . "&type=success");
+        } else {
+            header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt, de a megerősítő email küldése nem sikerült.") . "&type=alert");
+        }
         exit();
     } else {
         header("Location: ../index.php?message=" . urlencode("Regisztráció sikertelen volt.") . "&type=alert");
         exit();
-    }
-}
-
-function sendVerificationEmail($email, $token)
-{
-    $mail = new PHPMailer(true);
-
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host = 'smtp.mailjet.com'; // Mailjet SMTP server
-        $mail->SMTPAuth = true;
-        $mail->Username = '81ea24ce778b6e7ecc44af9aaaca1da3'; // Mailjet username
-        $mail->Password = '418bade66c7e26bbc9fb672efadd6512'; // Mailjet password
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
-
-        // Recipients
-        $mail->setFrom('balogbalesz1234@gmail.com', 'Fogorvosi Rendelő');
-        $mail->addAddress($email);
-
-        // Content
-        $mail->isHTML(true);
-        $mail->Subject = 'Email megerősítése';
-        $mail->Body = "Kérjük, kattintson a következő linkre az email cím megerősítéséhez: <a href='http://localhost:8000/Fogorvosi-rendelo-/verify.php?token=$token'>Megerősítés</a>";
-
-        $mail->send();
-    } catch (Exception $e) {
-        error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
     }
 }
