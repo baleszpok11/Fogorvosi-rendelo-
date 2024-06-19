@@ -12,10 +12,11 @@ $user_id = $_SESSION['patientID'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $doctor_id = $_POST['doctor_id'];
+    $procedure_id = $_POST['procedure_id'];
     $appointment_day = $_POST['appointment_day'];
     $appointment_time = $_POST['appointment_time'];
 
-    // ellenorzi a munkanapokat a doktorra
+    // Ellenőrizze, hogy a kiválasztott nap a doktor munkanapja-e
     $stmt = $conn->prepare("SELECT Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday FROM DoctorSchedule WHERE doctorID = ?");
     $stmt->bind_param("i", $doctor_id);
     $stmt->execute();
@@ -23,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $schedule = $result->fetch_assoc();
 
     if (!$schedule) {
-        $message = 'Az orvos rendszere nem található.';
+        $message = 'Az orvos ütemezése nem található.';
         header("Location: ../appointment.php?message=" . urlencode($message));
         exit();
     }
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // ellenorzi hogy a valasztott ido a doktor munkaorain belul van e
+    // Ellenőrizze, hogy a kiválasztott időpont az orvos munkaidején belül van-e
     $stmt2 = $conn->prepare("SELECT worktime FROM Doctor WHERE doctorID = ?");
     $stmt2->bind_param("i", $doctor_id);
     $stmt2->execute();
@@ -60,24 +61,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // beszuras a bazisba
+    // Időpont beillesztése az adatbázisba
     $appointment_datetime = date('Y-m-d H:i:s', strtotime("$appointment_day $appointment_time"));
-    $stmt3 = $conn->prepare("INSERT INTO Appointment (schedule, doctorID, patientID) VALUES (?, ?, ?)");
-    $stmt3->bind_param("sii", $appointment_datetime, $doctor_id, $user_id);
+    $stmt3 = $conn->prepare("INSERT INTO Appointment (schedule, doctorID, patientID, procedureID) VALUES (?, ?, ?, ?)");
+    $stmt3->bind_param("siii", $appointment_datetime, $doctor_id, $user_id, $procedure_id);
+
     try {
-        if ($stmt3->execute()) {
-            $message = 'Időpont sikeresen lefoglalva.';
-        } else {
-            $message = 'Nem sikerült időpontot foglalni. Kérem, próbálja újra.';
-        }
+        $stmt3->execute();
+        $message = 'Az időpont sikeresen lefoglalva.';
+        header("Location: ../appointment.php?message=" . urlencode($message));
     } catch (mysqli_sql_exception $e) {
-        $message = 'Az időpont már foglalt. Kérem, válasszon másik időpontot.';
+        if ($e->getCode() == 1062) { // Ismétlődő bejegyzés hibakód
+            $message = 'Az időpont már foglalt.';
+            header("Location: ../appointment.php?message=" . urlencode($message));
+        } else {
+            $message = 'Hiba történt az időpont foglalása közben. Kérjük, próbálja újra.';
+            header("Location: ../appointment.php?message=" . urlencode($message));
+        }
     }
 
-    header("Location: ../appointment.php?message=" . urlencode($message));
     exit();
 } else {
-    $message = 'Érvénytelen kérési módszer.';
-    header("Location: ../index.php?message=" . urlencode($message));
+    $message = 'Érvénytelen kérési mód.';
+    header("Location: ../appointment.php?message=" . urlencode($message));
     exit();
 }
+?>
