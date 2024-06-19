@@ -38,11 +38,16 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : '';
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="index.php">Kezdőoldal</a></li>
-                <?php if (!isset($_SESSION['patientID']) || !isset($_SESSION['doctorID'])): ?>
+                <?php if (!isset($_SESSION['patientID']) && !isset($_SESSION['doctorID'])): ?>
                     <li><a href="doctors.php">Orvosaink</a></li>
                     <li><a href="register.php">Regisztráció</a></li>
                     <li><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
+                <?php
+                if(isset($_SESSION['doctorID'])){
+                    echo '<li><a href="add_patient_records.php">Karton</a></li>';
+                }
+                ?>
                     <li><a href="doctors.php">Orvosaink</a></li>
                     <li><a href="appointment.php">Időpont foglalás</a></li>
                     <li class="dropdown">
@@ -50,12 +55,16 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : '';
                             <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <?php if (isset($_SESSION['patientID'])): ?>
                             <li><a href="profile.php">Profil</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
+                            <?php else: ?>
+                            <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
+                            <?php endif ?>
                         </ul>
+                        <?php endif ?>
                     </li>
-                <?php endif; ?>
             </ul>
         </div>
     </div>
