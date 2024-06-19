@@ -4,6 +4,26 @@ if (!isset($_SESSION["patientID"])) {
     header("location: index.php?message=Jelentkezzen be");
     exit();
 }
+// Include database configuration
+require 'functions/db-config.php';
+global $conn;
+
+// Get the current user's patientID from the session
+$patientID = $_SESSION['patientID'];
+
+// Query the database to check the 'auth' attribute
+$stmt = $conn->prepare("SELECT auth FROM Patient WHERE patientID = ?");
+$stmt->bind_param("i", $patientID);
+$stmt->execute();
+$stmt->bind_result($auth);
+$stmt->fetch();
+$stmt->close();
+
+// If 'auth' is not NULL, redirect to index.php
+if (!is_null($auth) && $auth !== '') {
+    header("location: index.php?message=" . urlencode("Kérjük, erősítse meg az email címét a folytatáshoz.") . "&type=alert");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="hu">
