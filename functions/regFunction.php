@@ -1,28 +1,31 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if(isset($_POST)){
     require 'db-config.php';
     global $conn;
-    $lastName = $_POST["lastName"];
     $firstName = $_POST["firstName"];
+    $lastName = $_POST["lastName"];
     $phoneNumber = $_POST["phoneNumber"];
     $password = $_POST["password"];
     $passwordCon = $_POST["passwordConfirm"];
     $email = $_POST["email"];
+    $username = $_POST["username"];
 
-    if ($password !== $passwordCon) {
-        header("Location: ../register.php?message=" . urlencode("Jelszavak nem egyeznek.") . "&type=error");
+    if($password !== $passwordCon)
+    {
+        header("Location: ../register.php?message=Jelszó nem egyezik.");
         exit();
     }
 
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-    $stmt = $conn->prepare("INSERT INTO Patient (userName, firstName, lastName, phoneNumber, email, password) VALUES ('Test9', ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $firstName, $lastName, $phoneNumber, $email, $hashed_password);
+    $stmt = $conn->prepare("INSERT INTO Patient (userName, firstName, lastName, phoneNumber, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $username, $firstName, $lastName, $phoneNumber, $email, $hashed_password);
 
     if ($stmt->execute() === TRUE) {
-        header("Location: ../index.php?message=" . urlencode("Regisztráció sikeres volt.") . "&type=success");
+        header("Location: ../index.php?message=Regisztráció sikeres volt.");
         exit();
     } else {
-        header("Location: ../index.php?message=" . urlencode("Regisztráció sikertelen volt.") . "&type=error");
+        header("Location: ../index.php?message=Regisztráció sikertelen volt.");
         exit();
     }
 }
+?>
