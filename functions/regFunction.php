@@ -50,13 +50,13 @@ function sendVerificationEmail($email, $token)
         $mail->isSMTP();
         $mail->Host = 'smtp.mailjet.com'; // Mailjet SMTP server
         $mail->SMTPAuth = true;
-        $mail->Username = ''; // Mailjet username
-        $mail->Password = ''; // Mailjet password
+        $mail->Username = '81ea24ce778b6e7ecc44af9aaaca1da3'; // Mailjet username
+        $mail->Password = '418bade66c7e26bbc9fb672efadd6512'; // Mailjet password
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('no-reply@yourdomain.com', 'Fogorvosi Rendelő');
+        $mail->setFrom('balogbalesz1234@gmail.com', 'Fogorvosi Rendelő');
         $mail->addAddress($email);
 
         // Content
