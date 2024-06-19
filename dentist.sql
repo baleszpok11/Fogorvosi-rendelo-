@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2024. Jún 18. 13:09
+-- Létrehozás ideje: 2024. Jún 19. 13:42
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -31,30 +31,19 @@ CREATE TABLE `Appointment` (
   `appID` int(11) NOT NULL,
   `schedule` datetime NOT NULL,
   `doctorID` int(11) NOT NULL,
-  `patientID` int(11) NOT NULL
+  `patientID` int(11) NOT NULL,
+  `procedureID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `Appointment`
 --
 
-INSERT INTO `Appointment` (`appID`, `schedule`, `doctorID`, `patientID`) VALUES
-(1, '2024-06-12 10:00:00', 3, 1),
-(2, '2024-06-12 14:00:00', 1, 1),
-(4, '2024-06-03 07:00:00', 4, 1),
-(5, '2024-06-07 07:00:00', 4, 1),
-(8, '2024-06-13 10:00:00', 3, 1),
-(9, '2024-06-05 07:00:00', 4, 1),
-(10, '2024-06-05 09:00:00', 2, 1),
-(11, '2024-06-07 09:00:00', 2, 1),
-(12, '2024-06-03 08:00:00', 1, 1),
-(16, '2024-06-07 08:00:00', 1, 1),
-(18, '2024-06-03 08:30:00', 1, 1),
-(19, '2024-06-04 08:00:00', 1, 1),
-(22, '2024-06-03 09:00:00', 1, 11),
-(24, '2024-06-04 10:30:00', 1, 11),
-(25, '2024-10-08 08:00:00', 1, 12),
-(26, '2024-07-16 08:00:00', 1, 12);
+INSERT INTO `Appointment` (`appID`, `schedule`, `doctorID`, `patientID`, `procedureID`) VALUES
+(33, '2024-06-25 08:00:00', 1, 12, 1),
+(35, '2024-06-25 09:00:00', 2, 12, 1),
+(36, '2024-06-25 09:00:00', 1, 12, 1),
+(37, '2024-06-19 08:00:00', 1, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -177,6 +166,13 @@ CREATE TABLE `Procedures` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- A tábla adatainak kiíratása `Procedures`
+--
+
+INSERT INTO `Procedures` (`procedureID`, `procedureName`, `price`) VALUES
+(1, 'Fogtömés', 2000.00);
+
+--
 -- Indexek a kiírt táblákhoz
 --
 
@@ -185,9 +181,10 @@ CREATE TABLE `Procedures` (
 --
 ALTER TABLE `Appointment`
   ADD PRIMARY KEY (`appID`),
-  ADD UNIQUE KEY `schedule` (`schedule`),
+  ADD UNIQUE KEY `unique_schedule_doctor` (`schedule`,`doctorID`),
   ADD KEY `patientID` (`patientID`),
-  ADD KEY `doctorID` (`doctorID`);
+  ADD KEY `doctorID` (`doctorID`),
+  ADD KEY `procedureID` (`procedureID`);
 
 --
 -- A tábla indexei `Doctor`
@@ -231,7 +228,7 @@ ALTER TABLE `Procedures`
 -- AUTO_INCREMENT a táblához `Appointment`
 --
 ALTER TABLE `Appointment`
-  MODIFY `appID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `appID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT a táblához `Doctor`
@@ -255,7 +252,7 @@ ALTER TABLE `PatientRecords`
 -- AUTO_INCREMENT a táblához `Procedures`
 --
 ALTER TABLE `Procedures`
-  MODIFY `procedureID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `procedureID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -266,7 +263,8 @@ ALTER TABLE `Procedures`
 --
 ALTER TABLE `Appointment`
   ADD CONSTRAINT `doctorID` FOREIGN KEY (`doctorID`) REFERENCES `Doctor` (`doctorID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `patientID` FOREIGN KEY (`patientID`) REFERENCES `Patient` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `patientID` FOREIGN KEY (`patientID`) REFERENCES `Patient` (`patientID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `procedureID` FOREIGN KEY (`procedureID`) REFERENCES `Procedures` (`procedureID`);
 
 --
 -- Megkötések a táblához `DoctorSchedule`
