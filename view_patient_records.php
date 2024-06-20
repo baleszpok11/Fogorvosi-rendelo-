@@ -14,11 +14,11 @@ $patientID = isset($_POST['patientID']) ? intval($_POST['patientID']) : 0;
 $patientRecords = [];
 
 if ($patientID > 0) {
-    $sql = "SELECT p.firstName, p.lastName, pr.procedureDate, pr.procedureDetails, pr.notes, proc.procedureName, proc.price 
+    $sql = "SELECT p.firstName, p.lastName, pr.procedureDate, pr.procedureDetails, pr.notes, proc.procedureName, pr.price 
             FROM PatientRecords pr
             JOIN Patient p ON pr.patientID = p.patientID
             JOIN Procedures proc ON pr.procedureID = proc.procedureID
-            WHERE pr.patientID = ?";
+            WHERE pr.patientID = ? ORDER BY pr.procedureDate DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$patientID]);
     $patientRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -30,12 +30,13 @@ if ($patientID > 0) {
 <head>
     <meta charset="UTF-8">
     <title>Beteg karton</title>
+    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Fogorvosi rendelő</a>
         </div>
@@ -44,19 +45,20 @@ if ($patientID > 0) {
             <li><a href="doctors.php">Orvosaink</a></li>
             <li><a href="add_patient_records.php">Karton írása</a></li>
             <li class="active"><a href="view_patient_records.php">Kartonok megtekintése</a></li>
-            <li><a href="view_patient_health.php">Fogak megtekintése</a></li>
+            <li><a href="view_patient_health.php">Fogak állapota</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li><a href="profile.php">Profil</a></li>
+                    <li role="separator" class="divider"></li>
                     <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
                 </ul>
             </li>
         </ul>
     </div>
 </nav>
-
 <div class="container" style="padding-top: 70px;">
     <h2>Beteg karton</h2>
     <form method="POST" action="view_patient_records.php" class="form-inline">

@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['patientID'])) {
     $patientID = intval($_POST['patientID']);
 
     try {
-        $stmt = $pdo->prepare("SELECT procedureDate, healthRating FROM PatientRecords WHERE patientID = ?");
+        $stmt = $pdo->prepare("SELECT procedureDate, healthRating FROM PatientRecords WHERE patientID = ? ORDER BY procedureDate");
         $stmt->bindParam(1, $patientID, PDO::PARAM_INT);
         $stmt->execute();
 

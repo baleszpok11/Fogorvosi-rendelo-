@@ -1,10 +1,5 @@
 <?php
-session_start(); // Start the PHP session for session variables
-
-// Assuming $_SESSION['firstName'] and $_SESSION['lastName'] are set after user login/authentication
-// Example:
-// $_SESSION['firstName'] = 'John';
-// $_SESSION['lastName'] = 'Doe';
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -13,12 +8,14 @@ session_start(); // Start the PHP session for session variables
     <title>Páciens egészségi állapot</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
     <style>
         canvas {
             border: 1px solid #ccc;
             margin-top: 20px;
             width: 100%;
-            height: 600px;
+            height: 400px;
         }
     </style>
 </head>
@@ -90,43 +87,62 @@ session_start(); // Start the PHP session for session variables
         });
 
         function drawChart(labels, scores) {
-            var canvas = document.getElementById('healthChart');
-            var ctx = canvas.getContext('2d');
+            var ctx = document.getElementById('healthChart').getContext('2d');
+            labels.sort(); // Sort labels (dates) in ascending order
+            var sortedScores = [];
+            labels.forEach((label, index) => {
+                sortedScores.push(scores[index]);
+            });
 
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            var width = (canvas.width - 50) / labels.length;
-            var max = 10; // Egészség 1-10es skálán
-            var paddingTop = 20;
-
-            // Draw y-axis labels
-            ctx.font = "12px Arial";
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            for (var i = 1; i <= 10; i++) {
-                var y = canvas.height - 50 - (i / 10) * (canvas.height - 50 - paddingTop);
-                ctx.fillText(i, 45, y);
-                ctx.strokeStyle = "#e0e0e0";
-                ctx.beginPath();
-                ctx.moveTo(50, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-
-            ctx.font = "12px Arial"; // Adjust font size
-            for (var i = 0; i < labels.length; i++) {
-                var height = (scores[i] / max) * (canvas.height - 50 - paddingTop);
-                ctx.fillStyle = 'rgba(75, 192, 192, 0.2)';
-                ctx.fillRect(i * width + 50, canvas.height - height - 50, width - 1, height);
-                ctx.fillStyle = 'rgba(75, 192, 192, 1)';
-                ctx.textAlign = 'center';
-                ctx.fillText(scores[i], i * width + 50 + width / 2, canvas.height - height - 55);
-                ctx.fillText(labels[i], i * width + 50 + width / 2, canvas.height - 20);
-            }
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Egészségi állapot',
+                        data: sortedScores,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x',
+                            },
+                            zoom: {
+                                enabled: true,
+                                mode: 'x',
+                                speed: 0.1
+                            }
+                        }
+                    }
+                }
+            });
         }
     });
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.0.0/dist/chartjs-plugin-zoom.min.js"></script>
 </body>
 </html>

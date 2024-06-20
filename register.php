@@ -11,6 +11,7 @@
             padding-top: 70px;
         }
     </style>
+    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
 </head>
 <body>
 
