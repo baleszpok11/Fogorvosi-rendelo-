@@ -31,6 +31,8 @@ session_start();
             <li><a href="add_patient_records.php">Karton írása</a></li>
             <li><a href="view_patient_records.php">Kartonok megtekintése</a></li>
             <li class="active"><a href="view_patient_health.php">Fogak állapota</a></li>
+            <li><a href="view_appointments.php">Foglalásaim</a></li>
+            <li><a href="admin.php">Admin oldal</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>

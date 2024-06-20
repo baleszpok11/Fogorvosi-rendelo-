@@ -64,6 +64,7 @@ $patientRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         echo '<li><a href="add_patient_records.php">Karton írása</a></li>';
                         echo '<li><a href="view_my_records.php">Kartonok megtekintése</a></li>';
                         echo '<li><a href="view_patient_health.php">Fogak állapota</a></li>';
+                        echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
                         echo '<li><a href="admin.php">Admin oldal</a></li>';
                     }
                     ?>

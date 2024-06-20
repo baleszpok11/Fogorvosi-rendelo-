@@ -1,13 +1,12 @@
 <?php
 session_start();
-if (!isset($_SESSION["patientID"])) {
+if (!isset($_SESSION["patientID"]) && !isset($_SESSION["doctorID"])) {
     header("location: index.php?message=Jelentkezzen be");
     exit();
 }
 
 require 'functions/db-config.php';
 global $pdo;
-$patientID = $_SESSION["patientID"];
 ?>
 
 <!DOCTYPE html>
@@ -58,6 +57,7 @@ $patientID = $_SESSION["patientID"];
                         echo '<li><a href="add_patient_records.php">Karton írása</a></li>';
                         echo '<li><a href="view_patient_records.php">Kartonok megtekintése</a></li>';
                         echo '<li><a href="view_patient_health.php">Fogak állapota</a></li>';
+                        echo '<li class="active"><a href="view_appointments.php">Foglalásaim</a></li>';
                         echo '<li><a href="admin.php">Admin oldal</a></li>';
                     }
                     ?>
@@ -90,14 +90,28 @@ $patientID = $_SESSION["patientID"];
         </thead>
         <tbody>
         <?php
-        $sql = "SELECT a.schedule, d.firstName, d.lastName, p.procedureName 
+        if(isset($_SESSION['patientID'])) {
+            $patientID = $_SESSION["patientID"];
+            $sql = "SELECT a.schedule, d.firstName, d.lastName, p.procedureName 
                     FROM Appointment a 
                     JOIN Doctor d ON a.doctorID = d.doctorID 
                     JOIN Procedures p ON a.procedureID = p.procedureID 
-                    WHERE a.patientID = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$patientID]);
-        $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    WHERE a.patientID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$patientID]);
+            $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        if(isset($_SESSION['doctorID'])) {
+            $doctorID = $_SESSION["doctorID"];
+            $sql = "SELECT a.schedule, pa.firstName, pa.lastName, p.procedureName 
+                    FROM Appointment a 
+                    JOIN Patient pa ON a.patientID = pa.patientID 
+                    JOIN Procedures p ON a.procedureID = p.procedureID 
+                    WHERE a.doctorID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$doctorID]);
+            $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 
         foreach ($appointments as $appointment) {
             echo "<tr>";
