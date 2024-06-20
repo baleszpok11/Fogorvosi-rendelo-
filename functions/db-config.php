@@ -1,11 +1,12 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "dentist";
+$dsn = 'mysql:host=localhost;dbname=dentist';
+$username = 'root';
+$password = '';
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die('Csatlakozás sikertelen ' . $conn->connect_error);
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo 'Connection failed: ' . $e->getMessage();
+    exit;
 }
