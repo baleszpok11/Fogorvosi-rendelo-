@@ -40,7 +40,10 @@ $patientID = $_SESSION["patientID"];
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="index.php">Kezdőoldal</a></li>
+                <li><a href="doctors.php">Orvosaink</a></li>
                 <li><a href="appointment.php">Időpont foglalás</a></li>
+                <li class="active"><a href="appointment.php">Foglalásaim</a></li>
+                <li><a href="view_my_records.php">Kartonom</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>

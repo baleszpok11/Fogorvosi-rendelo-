@@ -41,8 +41,10 @@ if ($patientID > 0) {
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="index.php">Kezdőoldal</a></li>
-            <li><a href="appointment.php">Időpont foglalás</a></li>
-            <li><a href="view_patient_records.php">Beteg karton</a></li>
+            <li><a href="doctors.php">Orvosaink</a></li>
+            <li><a href="add_patient_records.php">Karton írása</a></li>
+            <li class="active"><a href="view_patient_records.php">Kartonok megtekintése</a></li>
+            <li><a href="view_patient_health.php">Fogak megtekintése</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>

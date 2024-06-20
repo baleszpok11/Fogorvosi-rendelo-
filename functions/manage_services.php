@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':price', $price, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            echo "New procedure created successfully.";
+            echo "Bevitel sikeres volt.";
         } else {
             echo "Error: " . $stmt->errorInfo()[2];
         }
@@ -29,16 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':procedureID', $procedureID, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
-                echo "Procedure updated successfully.";
+                echo "Sikeres módosítás.";
             } else {
                 echo "Error: " . $stmt->errorInfo()[2];
             }
         } else {
-            echo "Procedure ID is required for updating a record.";
+            echo "Procedure ID szűkséges a módosításhoy.";
         }
     }
 } else {
-    echo "No form submitted.";
+    echo "Nincs elküldött adat.";
 }
 
 header("Location: ../admin.php");

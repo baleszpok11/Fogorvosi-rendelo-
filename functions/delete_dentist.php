@@ -13,15 +13,15 @@ if (!empty($doctorID)) {
         $sql->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
 
         if ($sql->execute()) {
-            echo "Record deleted successfully.<br>";
+            echo "Sikeres törlés<br>";
         } else {
-            echo "Error: Unable to execute the query.<br>";
+            echo "Error.<br>";
         }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage() . "<br>";
     }
 } else {
-    echo "Doctor ID is required for deleting a record.<br>";
+    echo "Doctor ID szükségés a törléshez<br>";
 }
 
 $pdo = null;

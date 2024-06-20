@@ -35,15 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 echo "</table>";
             } else {
-                echo "No bookings found for the selected date.";
+                echo "Nincs foglalás erre a dátumra";
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     } else {
-        echo "Date is required.";
+        echo "Adat szükséges.";
     }
 } else {
-    echo "Invalid request.";
+    echo "Helytelen kitöltés.";
 }
 ?>

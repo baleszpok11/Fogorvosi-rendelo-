@@ -57,6 +57,7 @@ if (!is_null($auth) && $auth !== '') {
                 <li><a href="doctors.php">Orvosaink</a></li>
                 <li class="active"><a href="appointment.php">Időpont foglalás</a></li>
                 <li><a href="view_appointments.php">Foglalásaim</a></li>
+                <li><a href="view_my_records.php">Kartonom</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?><span

@@ -53,16 +53,7 @@ $messageType = $_GET['type'] ?? 'info';
                     echo '<li><a href="admin.php">Admin oldal</a></li>';
                 }
                 ?>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="profile.php">Profil</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
-                        </ul>
-                    </li>
+
                 <?php endif; ?>
             </ul>
         </div>

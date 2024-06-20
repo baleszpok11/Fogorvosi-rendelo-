@@ -43,12 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':remember', $remember, PDO::PARAM_STR);
 
             if ($stmt->execute()) {
-                echo "New record created successfully";
+                echo "Bevitel sikeres volt";
             } else {
                 echo "Error: " . $stmt->errorInfo()[2];
             }
         } else {
-            echo "Error: Email already exists.";
+            echo "Email már létezik";
         }
     } elseif ($operation == "update") {
         if (!empty($doctorID)) {
@@ -67,15 +67,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
 
                 if ($stmt->execute()) {
-                    echo "Record updated successfully.<br>";
+                    echo "Módosítás sikeres.<br>";
                 } else {
                     echo "Error: " . $stmt->errorInfo()[2] . "<br>";
                 }
             } else {
-                echo "Error: Email already exists.<br>";
+                echo "Email már létezik<br>";
             }
         } else {
-            echo "Doctor ID is required for updating a record.<br>";
+            echo "Doctor ID szűkséges a módosításhoz.<br>";
         }
     }
 }

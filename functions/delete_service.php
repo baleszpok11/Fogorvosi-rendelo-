@@ -1,6 +1,6 @@
 <?php
 global $pdo;
-include 'db-config.php'; // Include your database configuration file
+include 'db-config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve and sanitize procedureID
@@ -8,25 +8,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($procedureID)) {
         try {
-            // Prepare the SQL statement
+
             $sql = $pdo->prepare("DELETE FROM Procedures WHERE procedureID = :procedureID");
             $sql->bindParam(':procedureID', $procedureID, PDO::PARAM_INT);
 
-            // Execute the SQL statement
+
             if ($sql->execute()) {
-                echo "Procedure deleted successfully.";
+                echo "Sikeres törlés.";
             } else {
-                echo "Error: Unable to execute the query.";
+                echo "Error";
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     } else {
-        echo "Procedure ID is required for deleting a record.";
+        echo "Error";
     }
 } else {
     // No form submitted
-    echo "No form submitted.";
+    echo "Helytelenül töltötte ki";
 }
 
 // Close the PDO connection
