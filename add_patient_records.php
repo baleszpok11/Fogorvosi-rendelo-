@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['doctorID'])) {
-    header("location: index.php?message=Jelentkezzen be");
+    header("location: index.php?message=" . urlencode("Jelentkezzen be") . "&type=alert");
     exit();
 }
 ?>
@@ -13,7 +13,6 @@ if (!isset($_SESSION['doctorID'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-
 </head>
 <body>
 
@@ -26,8 +25,7 @@ if (!isset($_SESSION['doctorID'])) {
             <li><a href="index.php">Kezdőoldal</a></li>
             <li><a href="appointment.php">Időpont foglalás</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                   aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -51,8 +49,7 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="patientID" class="col-sm-3 control-label">Páciens ID</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID"
-                               required>
+                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -64,8 +61,7 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="procedureDetails" class="col-sm-3 control-label">Eljárás részletei</label>
                     <div class="col-sm-9">
-                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4"
-                                  required></textarea>
+                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,9 +77,9 @@ if (!isset($_SESSION['doctorID'])) {
                             <option value="">Válasszon eljárást</option>
                             <?php
                             require 'functions/db-config.php';
-                            global $conn;
-                            $result = $conn->query("SELECT procedureID, procedureName FROM Procedures");
-                            while ($row = $result->fetch_assoc()) {
+                            global $pdo;
+                            $stmt = $pdo->query("SELECT procedureID, procedureName FROM Procedures");
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<option value=\"{$row['procedureID']}\">{$row['procedureName']}</option>";
                             }
                             ?>
@@ -91,8 +87,8 @@ if (!isset($_SESSION['doctorID'])) {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="healthRating" class="col-sm-2 control-label">Fogak állapota (1-10):</label>
-                    <div class="col-sm-10">
+                    <label for="healthRating" class="col-sm-3 control-label">Fogak állapota (1-10):</label>
+                    <div class="col-sm-9">
                         <input type="number" min="1" max="10" class="form-control" id="healthRating" name="healthRating" placeholder="Fogak állapota" required>
                     </div>
                 </div>

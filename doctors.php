@@ -1,17 +1,11 @@
 <?php
 session_start();
 require 'functions/db-config.php';
-global $conn;
+global $pdo;
 
 $query = "SELECT doctorID, firstName, lastName, specialisation, phoneNumber, email FROM Doctor";
-$result = $conn->query($query);
-
-$doctors = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $doctors[] = $row;
-    }
-}
+$stmt = $pdo->query($query);
+$doctors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="hu">

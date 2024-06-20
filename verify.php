@@ -1,34 +1,35 @@
 <?php
 require 'functions/db-config.php';
-global $conn;
+global $pdo;
+
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    $stmt = $conn->prepare("SELECT patientID FROM Patient WHERE auth = ?");
+    // Prepare the select statement
+    $stmt = $pdo->prepare("SELECT patientID FROM Patient WHERE auth = ?");
     if (!$stmt) {
-        die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+        die("Prepare failed: " . $pdo->errorInfo());
     }
 
-    $stmt->bind_param("s", $token);
-    if (!$stmt->execute()) {
-        die("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
-    }
+    // Execute the select statement
+    $stmt->execute([$token]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $result = $stmt->get_result();
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        $patientID = $row['patientID'];
+    if ($result) {
+        $patientID = $result['patientID'];
 
-        $stmt = $conn->prepare("UPDATE Patient SET auth = NULL WHERE patientID = ?");
+        // Prepare the update statement
+        $stmt = $pdo->prepare("UPDATE Patient SET auth = NULL WHERE patientID = ?");
         if (!$stmt) {
-            die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+            die("Prepare failed: " . $pdo->errorInfo());
         }
-        $stmt->bind_param("i", $patientID);
-        if ($stmt->execute()) {
+
+        // Execute the update statement
+        if ($stmt->execute([$patientID])) {
             header("Location: index.php?message=" . urlencode("Email cím megerősítve.") . "&type=success");
             exit();
         } else {
-            header("Location: index.php?message=" . urlencode("Hiba történt a megerősítés során: " . $stmt->error) . "&type=alert");
+            header("Location: index.php?message=" . urlencode("Hiba történt a megerősítés során: " . implode(", ", $stmt->errorInfo())) . "&type=alert");
             exit();
         }
     } else {

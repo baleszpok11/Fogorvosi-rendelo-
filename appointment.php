@@ -4,20 +4,18 @@ if (!isset($_SESSION["patientID"])) {
     header("location: index.php?message=Jelentkezzen be");
     exit();
 }
+
 // Include database configuration
 require 'functions/db-config.php';
-global $conn;
+global $pdo;
 
 // Get the current user's patientID from the session
 $patientID = $_SESSION['patientID'];
 
 // Query the database to check the 'auth' attribute
-$stmt = $conn->prepare("SELECT auth FROM Patient WHERE patientID = ?");
-$stmt->bind_param("i", $patientID);
-$stmt->execute();
-$stmt->bind_result($auth);
-$stmt->fetch();
-$stmt->close();
+$stmt = $pdo->prepare("SELECT auth FROM Patient WHERE patientID = ?");
+$stmt->execute([$patientID]);
+$auth = $stmt->fetchColumn();
 
 // If 'auth' is not NULL, redirect to index.php
 if (!is_null($auth) && $auth !== '') {
@@ -82,11 +80,8 @@ if (!is_null($auth) && $auth !== '') {
                 <select id="doctor" name="doctor_id" class="form-control" required>
                     <option value="">Válasszon orvost</option>
                     <?php
-                    require 'functions/db-config.php';
-                    global $conn;
-
-                    $result = $conn->query("SELECT doctorID, firstName, lastName FROM Doctor");
-                    while ($row = $result->fetch_assoc()) {
+                    $stmt = $pdo->query("SELECT doctorID, firstName, lastName FROM Doctor");
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<option value=\"{$row['doctorID']}\">{$row['firstName']} {$row['lastName']}</option>";
                     }
                     ?>
@@ -100,8 +95,8 @@ if (!is_null($auth) && $auth !== '') {
                 <select id="procedure" name="procedure_id" class="form-control" required>
                     <option value="">Válasszon eljárást</option>
                     <?php
-                    $result = $conn->query("SELECT procedureID, procedureName FROM Procedures");
-                    while ($row = $result->fetch_assoc()) {
+                    $stmt = $pdo->query("SELECT procedureID, procedureName FROM Procedures");
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<option value=\"{$row['procedureID']}\">{$row['procedureName']}</option>";
                     }
                     ?>

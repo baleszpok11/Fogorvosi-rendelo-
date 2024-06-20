@@ -6,7 +6,7 @@ if (!isset($_SESSION["patientID"])) {
 }
 
 require 'functions/db-config.php';
-global $conn;
+global $pdo;
 $patientID = $_SESSION["patientID"];
 ?>
 
@@ -75,22 +75,18 @@ $patientID = $_SESSION["patientID"];
                     JOIN Doctor d ON a.doctorID = d.doctorID 
                     JOIN Procedures p ON a.procedureID = p.procedureID 
                     WHERE a.patientID = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $patientID);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$patientID]);
+        $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch_assoc()) {
+        foreach ($appointments as $appointment) {
             echo "<tr>";
-            echo "<td>" . date('Y-m-d', strtotime($row['schedule'])) . "</td>";
-            echo "<td>" . date('H:i', strtotime($row['schedule'])) . "</td>";
-            echo "<td>" . $row['firstName'] . " " . $row['lastName'] . "</td>";
-            echo "<td>" . $row['procedureName'] . "</td>";
+            echo "<td>" . date('Y-m-d', strtotime($appointment['schedule'])) . "</td>";
+            echo "<td>" . date('H:i', strtotime($appointment['schedule'])) . "</td>";
+            echo "<td>" . htmlspecialchars($appointment['firstName'] . ' ' . $appointment['lastName']) . "</td>";
+            echo "<td>" . htmlspecialchars($appointment['procedureName']) . "</td>";
             echo "</tr>";
         }
-
-        $stmt->close();
-        $conn->close();
         ?>
         </tbody>
     </table>

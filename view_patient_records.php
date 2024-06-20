@@ -7,7 +7,7 @@ if (!isset($_SESSION["doctorID"])) {
 }
 
 require 'functions/db-config.php';
-global $conn;
+global $pdo;
 
 $patientID = isset($_POST['patientID']) ? intval($_POST['patientID']) : 0;
 
@@ -19,14 +19,9 @@ if ($patientID > 0) {
             JOIN Patient p ON pr.patientID = p.patientID
             JOIN Procedures proc ON pr.procedureID = proc.procedureID
             WHERE pr.patientID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $patientID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        $patientRecords[] = $row;
-    }
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$patientID]);
+    $patientRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
