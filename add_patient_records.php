@@ -91,6 +91,12 @@ if (!isset($_SESSION['doctorID'])) {
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="healthRating" class="col-sm-2 control-label">Fogak állapota (1-10):</label>
+                    <div class="col-sm-10">
+                        <input type="number" min="1" max="10" class="form-control" id="healthRating" name="healthRating" placeholder="Fogak állapota" required>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-9">
                         <button type="submit" class="btn btn-primary">Hozzáadás</button>
                     </div>

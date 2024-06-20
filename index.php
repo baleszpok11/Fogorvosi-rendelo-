@@ -51,6 +51,7 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : '';
                 <?php
                 if (isset($_SESSION['doctorID'])) {
                     echo '<li><a href="add_patient_records.php">Karton</a></li>';
+                    echo '<li><a href="view_patient_records.php">Beteg kartonok</a>';
                 }
                 ?>
                 <li><a href="doctors.php">Orvosaink</a></li>

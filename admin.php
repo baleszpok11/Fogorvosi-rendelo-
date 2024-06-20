@@ -1,5 +1,10 @@
 <?php
+session_start();
 include 'functions/db-config.php';
+if(!isset($_SESSION['doctorID'])){
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
