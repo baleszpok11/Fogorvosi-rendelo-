@@ -38,17 +38,26 @@ session_start();
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="index.php">Kezdőoldal</a></li>
-                <?php if (!isset($_SESSION['patientID']) || !isset($_SESSION['doctorID'])): ?>
+                <li><a href="doctors.php">Orvosaink</a></li>
+                <?php if (!isset($_SESSION['patientID']) && !isset($_SESSION['doctorID'])): ?>
                     <li><a href="register.php">Regisztráció</a></li>
                     <li class="active"><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
-                    <li><a href="appointment.php">Időpont foglalás</a></li>
-                    <li><a href="doctors.php">Orvosaink</a></li>
+                    <?php
+                    if(isset($_SESSION['patientID'])) {
+                        echo '<li><a href="appointment.php">Időpont foglalás</a></li>';
+                        echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
+                        echo '<li><a href="view_my_records.php">Kartonom</a></li>';
+                    }
+                    if(isset($_SESSION['doctorID'])) {
+                        echo '<li><a href="add_patient_records.php">Karton írása</a></li>';
+                        echo '<li><a href="view_patient_records.php">Kartonok megtekintése</a></li>';
+                        echo '<li><a href="view_patient_health.php">Fogak állapota</a></li>';
+                    }
+                    ?>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span
-                                    class="caret"></span>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="profile.php">Profil</a></li>
