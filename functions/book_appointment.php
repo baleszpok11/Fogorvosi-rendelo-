@@ -86,4 +86,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ../appointment.php?message=" . urlencode($message));
     exit();
 }
-?>
