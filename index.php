@@ -1,7 +1,7 @@
 <?php
 session_start();
-$message = isset($_GET['message']) ? $_GET['message'] : '';
-$messageType = isset($_GET['type']) ? $_GET['type'] : 'info';
+$message = $_GET['message'] ?? '';
+$messageType = $_GET['type'] ?? 'info';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +35,7 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : 'info';
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="index.php">Kezdőoldal</a></li>
-                <?php if (!isset($_SESSION['patientID'])): ?>
+                <?php if (!isset($_SESSION['patientID']) && !isset($_SESSION['doctorID'])): ?>
                     <li><a href="register.php">Regisztráció</a></li>
                     <li><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
