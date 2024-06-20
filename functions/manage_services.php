@@ -1,28 +1,43 @@
 <?php
 include 'db-config.php';
 
-$conn = getDbConnection();
+global $conn;
 
-if (isset($_POST['add_appointment'])) {
-    $name = $_POST['appointment_name'];
-    $price = $_POST['price'];
-    $sql = "INSERT INTO Appointments (name, price) VALUES ('$name', $price)";
-    $conn->query($sql);
-}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $operation = $_POST["operation"];
+    $procedureID = isset($_POST["procedureID"]) ? intval($_POST["procedureID"]) : null;
+    $procedureName = isset($_POST["procedureName"]) ? $_POST["procedureName"] : null;
+    $price = isset($_POST["price"]) ? floatval($_POST["price"]) : null;
 
-if (isset($_POST['modify_appointment'])) {
-    $id = $_POST['appointment_id_modify'];
-    $name = $_POST['new_appointment_name'];
-    $duration = $_POST['new_duration'];
-    $price = $_POST['new_price'];
-    $sql = "UPDATE Appointments SET name='$name', price=$price WHERE id=$id";
-    $conn->query($sql);
-}
+    if ($operation == "insert") {
+        $sql = $conn->prepare("INSERT INTO Procedures (procedureName, price) VALUES (?, ?)");
+        $sql->bind_param("sd", $procedureName, $price);
 
-if (isset($_POST['delete_appointment'])) {
-    $id = $_POST['appointment_id_delete'];
-    $sql = "DELETE FROM Appointments WHERE id=$id";
-    $conn->query($sql);
+        if ($sql->execute()) {
+            echo "New procedure created successfully.";
+        } else {
+            echo "Error: " . $sql->error;
+        }
+
+        $sql->close();
+    } elseif ($operation == "update") {
+        if (!empty($procedureID)) {
+            $sql = $conn->prepare("UPDATE Procedures SET procedureName = ?, price = ? WHERE procedureID = ?");
+            $sql->bind_param("sdi", $procedureName, $price, $procedureID);
+
+            if ($sql->execute()) {
+                echo "Procedure updated successfully.";
+            } else {
+                echo "Error: " . $sql->error;
+            }
+
+            $sql->close();
+        } else {
+            echo "Procedure ID is required for updating a record.";
+        }
+    }
+} else {
+    echo "No form submitted.";
 }
 
 $conn->close();

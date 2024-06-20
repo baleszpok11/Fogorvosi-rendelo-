@@ -6,24 +6,26 @@ global $conn;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $operation = $_POST["operation"];
     $doctorID = isset($_POST["doctorID"]) ? $_POST["doctorID"] : null;
-    $firstName = $_POST["firstName"];
-    $lastName = $_POST["lastName"];
-    $password = $_POST["password"];
-    $phoneNumber = $_POST["phoneNumber"];
-    $email = $_POST["email"];
-    $worktime = $_POST["worktime"];
-    $specialisation = $_POST["specialisation"];
-    $forget = $_POST["forget"];
-    $remember = $_POST["remember"];
+    $firstName = isset($_POST["firstName"]) ? $_POST["firstName"] : null;
+    $lastName = isset($_POST["lastName"]) ? $_POST["lastName"] : null;
+    $password = isset($_POST["password"]) ? password_hash($_POST["password"], PASSWORD_BCRYPT) : null;
+    $phoneNumber = isset($_POST["phoneNumber"]) ? $_POST["phoneNumber"] : null;
+    $email = isset($_POST["email"]) ? $_POST["email"] : null;
+    $worktime = isset($_POST["worktime"]) ? $_POST["worktime"] : null;
+    $specialisation = isset($_POST["specialisation"]) ? $_POST["specialisation"] : null;
+    $forget = isset($_POST["forget"]) ? $_POST["forget"] : null;
+    $remember = isset($_POST["remember"]) ? $_POST["remember"] : null;
 
-    // Check if email already exists
-    $checkEmailSql = "SELECT doctorID FROM Doctor WHERE email='$email'";
-    $result = $conn->query($checkEmailSql);
+    if ($operation == "insert" || $operation == "update") {
+        // Check if email already exists
+        $checkEmailSql = "SELECT doctorID FROM Doctor WHERE email='$email'";
+        $result = $conn->query($checkEmailSql);
 
-    if ($result->num_rows > 0) {
-        $existingDoctorID = $result->fetch_assoc()['doctorID'];
-    } else {
-        $existingDoctorID = null;
+        if ($result->num_rows > 0) {
+            $existingDoctorID = $result->fetch_assoc()['doctorID'];
+        } else {
+            $existingDoctorID = null;
+        }
     }
 
     if ($operation == "insert") {
@@ -43,31 +45,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($doctorID)) {
             if ($existingDoctorID === null || $existingDoctorID == $doctorID) {
                 $sql = "UPDATE Doctor
-                        SET firstName='$firstName', lastName='$lastName', password='$password', phoneNumber='$phoneNumber', email='$email', worktime='$worktime', specialisation='$specialisation', forget='$forget', remember='$remember'
+                        SET firstName='$firstName', lastName='$lastName', password='$password', phoneNumber='$phoneNumber', email='$email', worktime='$worktime', specialisation='$specialisation'
                         WHERE doctorID=$doctorID";
 
+                echo "Executing query: $sql<br>";
+
                 if ($conn->query($sql) === TRUE) {
-                    echo "Record updated successfully";
+                    echo "Record updated successfully.<br>";
                 } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
             } else {
-                echo "Error: Email already exists.";
+                echo "Error: Email already exists.<br>";
             }
         } else {
-            echo "Doctor ID is required for updating a record.";
+            echo "Doctor ID is required for updating a record.<br>";
         }
     }
 }
 
-
-
-if (isset($_POST['delete_doctor'])) {
-    $id = $_POST['doctor_id_delete'];
-    $sql = "DELETE FROM Doctors WHERE id=$id";
-    $conn->query($sql);
-}
-
 $conn->close();
 header("Location: ../admin.php");
-
+?>
