@@ -34,7 +34,8 @@ session_start();
             <li><a href="view_appointments.php">Foglalásaim</a></li>
             <li><a href="admin.php">Admin oldal</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -59,16 +60,16 @@ session_start();
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#patientHealthForm').submit(function(e) {
+    $(document).ready(function () {
+        $('#patientHealthForm').submit(function (e) {
             e.preventDefault();
             var patientID = $('#patientID').val();
 
             $.ajax({
                 url: 'functions/get_patient_health.php',
                 type: 'POST',
-                data: { patientID: patientID },
-                success: function(response) {
+                data: {patientID: patientID},
+                success: function (response) {
                     try {
                         var data = JSON.parse(response);
                         if (data.success) {
@@ -81,7 +82,7 @@ session_start();
                         alert('A feldolgozás közben hiba történt.');
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                     alert('Hiba történt a kérés feldolgozása közben. Kérjük, próbálja újra.');
                 }

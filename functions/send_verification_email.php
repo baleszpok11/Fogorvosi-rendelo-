@@ -1,10 +1,12 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
+
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 require '../vendor/autoload.php';
 
-function send_verification_email($email, $token) {
+function send_verification_email($email, $token)
+{
     $mail = new PHPMailer(true);
 
     try {
@@ -44,4 +46,5 @@ function send_verification_email($email, $token) {
         return false;
     }
 }
+
 ?>

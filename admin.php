@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'functions/db-config.php';
-if(!isset($_SESSION['doctorID'])){
+if (!isset($_SESSION['doctorID'])) {
     header("location: index.php&message=Nem admin&type=error");
     exit();
 }
@@ -23,6 +23,7 @@ if(!isset($_SESSION['doctorID'])){
         body {
             padding-top: 70px;
         }
+
         div {
             border-bottom: 1px solid #000;
         }
@@ -31,17 +32,18 @@ if(!isset($_SESSION['doctorID'])){
         function toggleFields() {
             var operation = document.getElementById("operation").value;
             var fields = document.querySelectorAll(".conditional-field");
-            fields.forEach(function(field) {
+            fields.forEach(function (field) {
                 field.style.display = (operation === "delete") ? "none" : "block";
             });
         }
+
         function fetchBookings() {
             var date = document.getElementById("date-picker").value;
             if (date) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "functions/view_reservations.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
+                xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         document.getElementById("bookings").innerHTML = xhr.responseText;
                     }
@@ -176,10 +178,10 @@ if(!isset($_SESSION['doctorID'])){
 </div>
 <div>
     <h2>Orvos törlése</h2>
-    <form action = "functions/delete_dentist.php" method="post">
-    <label for="doctorID">Doctor ID:</label>
-    <input type="number" id="doctorID" name="doctorID"><br><br>
-    <input type="submit" value="küldés">
+    <form action="functions/delete_dentist.php" method="post">
+        <label for="doctorID">Doctor ID:</label>
+        <input type="number" id="doctorID" name="doctorID"><br><br>
+        <input type="submit" value="küldés">
     </form>
 </div>
 

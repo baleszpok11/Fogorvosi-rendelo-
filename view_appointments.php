@@ -90,7 +90,7 @@ global $pdo;
         </thead>
         <tbody>
         <?php
-        if(isset($_SESSION['patientID'])) {
+        if (isset($_SESSION['patientID'])) {
             $patientID = $_SESSION["patientID"];
             $sql = "SELECT a.schedule, d.firstName, d.lastName, p.procedureName 
                     FROM Appointment a 
@@ -101,7 +101,7 @@ global $pdo;
             $stmt->execute([$patientID]);
             $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        if(isset($_SESSION['doctorID'])) {
+        if (isset($_SESSION['doctorID'])) {
             $doctorID = $_SESSION["doctorID"];
             $sql = "SELECT a.schedule, pa.firstName, pa.lastName, p.procedureName 
                     FROM Appointment a 

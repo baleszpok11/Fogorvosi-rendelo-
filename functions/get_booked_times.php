@@ -1,6 +1,7 @@
 <?php
 require 'db-config.php';
-<<<<<<< Updated upstream
+<<<<
+<<< Updated upstream
 =======
 
 >>>>>>> Stashed changes

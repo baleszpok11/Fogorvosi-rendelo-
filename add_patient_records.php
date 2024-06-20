@@ -31,7 +31,8 @@ if (!isset($_SESSION['doctorID'])) {
             <li><a href="view_appointments.php">Foglalásaim</a></li>
             <li><a href="admin.php">Admin oldal</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -53,7 +54,8 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="patientID" class="col-sm-3 control-label">Páciens ID</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID" required>
+                        <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Páciens ID"
+                               required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -65,7 +67,8 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="procedureDetails" class="col-sm-3 control-label">Eljárás részletei</label>
                     <div class="col-sm-9">
-                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4" required></textarea>
+                        <textarea class="form-control" id="procedureDetails" name="procedureDetails" rows="4"
+                                  required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -93,7 +96,8 @@ if (!isset($_SESSION['doctorID'])) {
                 <div class="form-group">
                     <label for="healthRating" class="col-sm-3 control-label">Fogak állapota (1-10):</label>
                     <div class="col-sm-9">
-                        <input type="number" min="1" max="10" class="form-control" id="healthRating" name="healthRating" placeholder="Fogak állapota" required>
+                        <input type="number" min="1" max="10" class="form-control" id="healthRating" name="healthRating"
+                               placeholder="Fogak állapota" required>
                     </div>
                 </div>
                 <div class="form-group">

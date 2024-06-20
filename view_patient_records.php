@@ -49,7 +49,8 @@ if ($patientID > 0) {
             <li><a href="view_appointments.php">Foglalásaim</a></li>
             <li><a href="admin.php">Admin oldal</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
                     <?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -66,12 +67,14 @@ if ($patientID > 0) {
     <form method="POST" action="view_patient_records.php" class="form-inline">
         <div class="form-group">
             <label for="patientID">Beteg ID:</label>
-            <input type="text" class="form-control" id="patientID" name="patientID" placeholder="Adja meg a beteg ID-jét" required>
+            <input type="text" class="form-control" id="patientID" name="patientID"
+                   placeholder="Adja meg a beteg ID-jét" required>
         </div>
         <button type="submit" class="btn btn-primary">Keresés</button>
     </form>
     <?php if ($patientID > 0 && empty($patientRecords)): ?>
-        <div class="alert alert-warning" role="alert" style="margin-top: 10px;">Nincsenek rekordok ehhez a beteghez.</div>
+        <div class="alert alert-warning" role="alert" style="margin-top: 10px;">Nincsenek rekordok ehhez a beteghez.
+        </div>
     <?php endif; ?>
     <?php if (!empty($patientRecords)): ?>
         <table class="table table-bordered" style="margin-top: 20px;">

@@ -41,12 +41,12 @@ $message = $_GET['message'] ?? '';
                     <li><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
                     <?php
-                    if(isset($_SESSION['patientID'])) {
+                    if (isset($_SESSION['patientID'])) {
                         echo '<li><a href="appointment.php">Időpont foglalás</a></li>';
                         echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
                         echo '<li><a href="view_my_records.php">Kartonom</a></li>';
                     }
-                    if(isset($_SESSION['doctorID'])) {
+                    if (isset($_SESSION['doctorID'])) {
                         echo '<li><a href="add_patient_records.php">Karton írása</a></li>';
                         echo '<li><a href="view_patient_records.php">Kartonok megtekintése</a></li>';
                         echo '<li><a href="view_patient_health.php">Fogak állapota</a></li>';
@@ -55,8 +55,10 @@ $message = $_GET['message'] ?? '';
                     }
                     ?>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span class="caret"></span>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span
+                                    class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="active"><a href="profile.php">Profil</a></li>

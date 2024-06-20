@@ -3,7 +3,8 @@ global $pdo;
 session_start();
 require 'db-config.php';
 require '../vendor/autoload.php';
-use \Mailjet\Resources;
+
+use Mailjet\Resources;
 
 if (!isset($_SESSION['patientID'])) {
     header("Location: ../login.php");
