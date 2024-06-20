@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2024. Jún 20. 22:35
+-- Létrehozás ideje: 2024. Jún 20. 23:07
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -180,46 +180,8 @@ INSERT INTO `PatientRecords` (`recordID`, `patientID`, `doctorID`, `procedureDat
 (28, 20, 6, '2024-03-13', 'Fogkő eltávolítás', 'A páciens jól viselte a kezelést.', 36000.00, 5, NULL),
 (29, 20, 6, '2024-03-13', 'Fogkő eltávolítás', 'Minden rendben volt.', 36000.00, 5, 7),
 (30, 20, 6, '2024-06-05', 'Fogkő eltávolítás', 'Az eljárás zökkenőmentes volt.', 34000.00, 5, 10),
-(31, 20, 6, '2024-06-20', 'Nagyon szép fogak.', 'Cutie patootie', 34000.00, 5, 10);
-
---
--- Eseményindítók `PatientRecords`
---
-DELIMITER $$
-CREATE TRIGGER `apply_discount_before_insert` BEFORE INSERT ON `PatientRecords` FOR EACH ROW BEGIN
-    DECLARE visit_count INT;
-    DECLARE original_price DECIMAL(10, 2);
-    DECLARE discount_percentage DECIMAL(5, 2);
-    
-    -- Get the number of previous visits
-    SELECT COUNT(*)
-    INTO visit_count
-    FROM `PatientRecords`
-    WHERE `patientID` = NEW.`patientID`
-      AND `procedureDate` < NEW.`procedureDate`;
-
-    -- Get the original price of the procedure
-    SELECT `price`
-    INTO original_price
-    FROM `Procedures`
-    WHERE `procedureID` = NEW.`procedureID`;
-
-    -- Determine the discount percentage based on visit count
-    IF visit_count >= 15 THEN
-        SET discount_percentage = 15;
-    ELSEIF visit_count >= 8 THEN
-        SET discount_percentage = 10;
-    ELSEIF visit_count >= 3 THEN
-        SET discount_percentage = 5;
-    ELSE
-        SET discount_percentage = 0;
-    END IF;
-
-    -- Calculate the discounted price
-    SET NEW.`price` = original_price - (original_price * discount_percentage / 100);
-END
-$$
-DELIMITER ;
+(31, 20, 6, '2024-06-20', 'Nagyon szép fogak.', 'Cutie patootie', 34000.00, 5, 10),
+(35, 20, 6, '2024-06-21', 'test', 'test', 17000.00, 3, 9);
 
 -- --------------------------------------------------------
 
@@ -324,7 +286,7 @@ ALTER TABLE `Patient`
 -- AUTO_INCREMENT a táblához `PatientRecords`
 --
 ALTER TABLE `PatientRecords`
-  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT a táblához `Procedures`
