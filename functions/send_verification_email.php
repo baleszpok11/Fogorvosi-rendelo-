@@ -34,7 +34,7 @@ function send_verification_email($email, $token) {
         // Content
         $mail->isHTML(true);
         $mail->Subject = 'Email megerősítés';
-        $verificationLink = "http://localhost:8000/verify.php?token=$token";
+        $verificationLink = "https://lite.stud.vts.su.ac.rs/verify.php?token=$token";
         $mail->Body = "Kérjük, erősítse meg az email címét az alábbi linkre kattintva: <a href='$verificationLink'>Email megerősítése</a>";
 
         $mail->send();

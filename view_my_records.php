@@ -13,11 +13,11 @@ $patientID = $_SESSION['patientID'];
 
 $patientRecords = [];
 
-$sql = "SELECT pr.procedureDate, pr.procedureDetails, pr.notes, d.firstName AS doctorFirstName, d.lastName AS doctorLastName, proc.procedureName, proc.price 
+$sql = "SELECT pr.procedureDate, pr.procedureDetails, pr.notes, d.firstName AS doctorFirstName, d.lastName AS doctorLastName, proc.procedureName, pr.price 
         FROM PatientRecords pr
         JOIN Doctor d ON pr.doctorID = d.doctorID
         JOIN Procedures proc ON pr.procedureID = proc.procedureID
-        WHERE pr.patientID = ?";
+        WHERE pr.patientID = ? ORDER BY pr.procedureDate DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$patientID]);
 $patientRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2024. Jún 20. 14:27
+-- Létrehozás ideje: 2024. Jún 20. 15:53
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -145,6 +145,7 @@ CREATE TABLE `PatientRecords` (
   `procedureDate` date DEFAULT NULL,
   `procedureDetails` text DEFAULT NULL,
   `notes` text DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
   `procedureID` int(11) DEFAULT NULL,
   `healthRating` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -153,11 +154,66 @@ CREATE TABLE `PatientRecords` (
 -- A tábla adatainak kiíratása `PatientRecords`
 --
 
-INSERT INTO `PatientRecords` (`recordID`, `patientID`, `doctorID`, `procedureDate`, `procedureDetails`, `notes`, `procedureID`, `healthRating`) VALUES
-(7, 20, 6, '2024-06-20', 'nice', 'nice', 2, 10),
-(8, 20, 6, '2024-06-18', '<?php\r\nsession_start();\r\n\r\nif (!isset($_SESSION[\"doctorID\"])) {\r\n    header(\"location: index.php?message=\" . urlencode(\"Jelentkezzen be\") . \"&type=alert\");\r\n    exit();\r\n}\r\n\r\nrequire \'functions/db-config.php\';\r\nglobal $conn;\r\n\r\n$patientID = isset($_POST[\'patientID\']) ? intval($_POST[\'patientID\']) : 0;\r\n\r\n$patientRecords = [];\r\n\r\nif ($patientID > 0) {\r\n    $sql = \"SELECT p.firstName, p.lastName, pr.procedureDate, pr.procedureDetails, pr.notes, proc.procedureName, proc.price \r\n            FROM PatientRecords pr\r\n            JOIN Patient p ON pr.patientID = p.patientID\r\n            JOIN Procedures proc ON pr.procedureID = proc.procedureID\r\n            WHERE pr.patientID = ?\";\r\n    $stmt = $conn->prepare($sql);\r\n    $stmt->bind_param(\"i\", $patientID);\r\n    $stmt->execute();\r\n    $result = $stmt->get_result();\r\n\r\n    while ($row = $result->fetch_assoc()) {\r\n        $patientRecords[] = $row;\r\n    }\r\n}\r\n?>\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"hu\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Beteg rekordok</title>\r\n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css\">\r\n</head>\r\n<body>\r\n\r\n<nav class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n        <div class=\"navbar-header\">\r\n            <a class=\"navbar-brand\" href=\"#\">Fogorvosi rendelő</a>\r\n        </div>\r\n        <ul class=\"nav navbar-nav navbar-right\">\r\n            <li><a href=\"index.php\">Kezdőoldal</a></li>\r\n            <li><a href=\"appointment.php\">Időpont foglalás</a></li>\r\n            <li><a href=\"view_patient_records.php\">Beteg rekordok</a></li>\r\n            <li class=\"dropdown\">\r\n                <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                    <?php echo $_SESSION[\'firstName\'] . \' \' . $_SESSION[\'lastName\']; ?> <span class=\"caret\"></span>\r\n                </a>\r\n                <ul class=\"dropdown-menu\">\r\n                    <li><a href=\"functions/logOutFunction.php\">Kijelentkezés</a></li>\r\n                </ul>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</nav>\r\n\r\n<div class=\"container\" style=\"padding-top: 70px;\">\r\n    <h2>Beteg rekordok</h2>\r\n    <form method=\"POST\" action=\"view_patient_records.php\" class=\"form-inline\">\r\n        <div class=\"form-group\">\r\n            <label for=\"patientID\">Beteg ID:</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"patientID\" name=\"patientID\" placeholder=\"Adja meg a beteg ID-jét\" required>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-primary\">Keresés</button>\r\n    </form>\r\n    <?php if ($patientID > 0 && empty($patientRecords)): ?>\r\n        <div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 10px;\">Nincsenek rekordok ehhez a beteghez.</div>\r\n    <?php endif; ?>\r\n    <?php if (!empty($patientRecords)): ?>\r\n    <table class=\"table table-bordered\" style=\"margin-top: 20px;\">\r\n        <thead>\r\n        <tr>\r\n            <th>Beteg neve</th>\r\n            <th>Eljárás dátuma</th>\r\n            <th>Eljárás részletei</th>\r\n            <th>Megjegyzések</th>\r\n            <th>Eljárás neve</th>\r\n            <th>Ár</th>\r\n        </tr>\r\n        </thead>\r\n        <tbody>\r\n        <?php foreach ($patientRecords as $record): ?>\r\n            <tr>\r\n                <td><?php echo htmlspecialchars($record[\'firstName\'] . \' \' . $record[\'lastName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDate\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDetails\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'notes\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'price\']); ?> HUF</td>\r\n            </tr>\r\n        <?php endforeach; ?>\r\n        </tbody>\r\n    </table>\r\n    <?php endif; ?>\r\n</div>\r\n\r\n<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\r\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js\"></script>\r\n</body>\r\n</html>\r\n<?php\r\nsession_start();\r\n\r\nif (!isset($_SESSION[\"doctorID\"])) {\r\n    header(\"location: index.php?message=\" . urlencode(\"Jelentkezzen be\") . \"&type=alert\");\r\n    exit();\r\n}\r\n\r\nrequire \'functions/db-config.php\';\r\nglobal $conn;\r\n\r\n$patientID = isset($_POST[\'patientID\']) ? intval($_POST[\'patientID\']) : 0;\r\n\r\n$patientRecords = [];\r\n\r\nif ($patientID > 0) {\r\n    $sql = \"SELECT p.firstName, p.lastName, pr.procedureDate, pr.procedureDetails, pr.notes, proc.procedureName, proc.price \r\n            FROM PatientRecords pr\r\n            JOIN Patient p ON pr.patientID = p.patientID\r\n            JOIN Procedures proc ON pr.procedureID = proc.procedureID\r\n            WHERE pr.patientID = ?\";\r\n    $stmt = $conn->prepare($sql);\r\n    $stmt->bind_param(\"i\", $patientID);\r\n    $stmt->execute();\r\n    $result = $stmt->get_result();\r\n\r\n    while ($row = $result->fetch_assoc()) {\r\n        $patientRecords[] = $row;\r\n    }\r\n}\r\n?>\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"hu\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Beteg rekordok</title>\r\n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css\">\r\n</head>\r\n<body>\r\n\r\n<nav class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n        <div class=\"navbar-header\">\r\n            <a class=\"navbar-brand\" href=\"#\">Fogorvosi rendelő</a>\r\n        </div>\r\n        <ul class=\"nav navbar-nav navbar-right\">\r\n            <li><a href=\"index.php\">Kezdőoldal</a></li>\r\n            <li><a href=\"appointment.php\">Időpont foglalás</a></li>\r\n            <li><a href=\"view_patient_records.php\">Beteg rekordok</a></li>\r\n            <li class=\"dropdown\">\r\n                <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                    <?php echo $_SESSION[\'firstName\'] . \' \' . $_SESSION[\'lastName\']; ?> <span class=\"caret\"></span>\r\n                </a>\r\n                <ul class=\"dropdown-menu\">\r\n                    <li><a href=\"functions/logOutFunction.php\">Kijelentkezés</a></li>\r\n                </ul>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</nav>\r\n\r\n<div class=\"container\" style=\"padding-top: 70px;\">\r\n    <h2>Beteg rekordok</h2>\r\n    <form method=\"POST\" action=\"view_patient_records.php\" class=\"form-inline\">\r\n        <div class=\"form-group\">\r\n            <label for=\"patientID\">Beteg ID:</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"patientID\" name=\"patientID\" placeholder=\"Adja meg a beteg ID-jét\" required>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-primary\">Keresés</button>\r\n    </form>\r\n    <?php if ($patientID > 0 && empty($patientRecords)): ?>\r\n        <div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 10px;\">Nincsenek rekordok ehhez a beteghez.</div>\r\n    <?php endif; ?>\r\n    <?php if (!empty($patientRecords)): ?>\r\n    <table class=\"table table-bordered\" style=\"margin-top: 20px;\">\r\n        <thead>\r\n        <tr>\r\n            <th>Beteg neve</th>\r\n            <th>Eljárás dátuma</th>\r\n            <th>Eljárás részletei</th>\r\n            <th>Megjegyzések</th>\r\n            <th>Eljárás neve</th>\r\n            <th>Ár</th>\r\n        </tr>\r\n        </thead>\r\n        <tbody>\r\n        <?php foreach ($patientRecords as $record): ?>\r\n            <tr>\r\n                <td><?php echo htmlspecialchars($record[\'firstName\'] . \' \' . $record[\'lastName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDate\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDetails\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'notes\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'price\']); ?> HUF</td>\r\n            </tr>\r\n        <?php endforeach; ?>\r\n        </tbody>\r\n    </table>\r\n    <?php endif; ?>\r\n</div>\r\n\r\n<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\r\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js\"></script>\r\n</body>\r\n</html>', '<?php\r\nsession_start();\r\n\r\nif (!isset($_SESSION[\"doctorID\"])) {\r\n    header(\"location: index.php?message=\" . urlencode(\"Jelentkezzen be\") . \"&type=alert\");\r\n    exit();\r\n}\r\n\r\nrequire \'functions/db-config.php\';\r\nglobal $conn;\r\n\r\n$patientID = isset($_POST[\'patientID\']) ? intval($_POST[\'patientID\']) : 0;\r\n\r\n$patientRecords = [];\r\n\r\nif ($patientID > 0) {\r\n    $sql = \"SELECT p.firstName, p.lastName, pr.procedureDate, pr.procedureDetails, pr.notes, proc.procedureName, proc.price \r\n            FROM PatientRecords pr\r\n            JOIN Patient p ON pr.patientID = p.patientID\r\n            JOIN Procedures proc ON pr.procedureID = proc.procedureID\r\n            WHERE pr.patientID = ?\";\r\n    $stmt = $conn->prepare($sql);\r\n    $stmt->bind_param(\"i\", $patientID);\r\n    $stmt->execute();\r\n    $result = $stmt->get_result();\r\n\r\n    while ($row = $result->fetch_assoc()) {\r\n        $patientRecords[] = $row;\r\n    }\r\n}\r\n?>\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"hu\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Beteg rekordok</title>\r\n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css\">\r\n</head>\r\n<body>\r\n\r\n<nav class=\"navbar navbar-default navbar-fixed-top\">\r\n    <div class=\"container\">\r\n        <div class=\"navbar-header\">\r\n            <a class=\"navbar-brand\" href=\"#\">Fogorvosi rendelő</a>\r\n        </div>\r\n        <ul class=\"nav navbar-nav navbar-right\">\r\n            <li><a href=\"index.php\">Kezdőoldal</a></li>\r\n            <li><a href=\"appointment.php\">Időpont foglalás</a></li>\r\n            <li><a href=\"view_patient_records.php\">Beteg rekordok</a></li>\r\n            <li class=\"dropdown\">\r\n                <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                    <?php echo $_SESSION[\'firstName\'] . \' \' . $_SESSION[\'lastName\']; ?> <span class=\"caret\"></span>\r\n                </a>\r\n                <ul class=\"dropdown-menu\">\r\n                    <li><a href=\"functions/logOutFunction.php\">Kijelentkezés</a></li>\r\n                </ul>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</nav>\r\n\r\n<div class=\"container\" style=\"padding-top: 70px;\">\r\n    <h2>Beteg rekordok</h2>\r\n    <form method=\"POST\" action=\"view_patient_records.php\" class=\"form-inline\">\r\n        <div class=\"form-group\">\r\n            <label for=\"patientID\">Beteg ID:</label>\r\n            <input type=\"text\" class=\"form-control\" id=\"patientID\" name=\"patientID\" placeholder=\"Adja meg a beteg ID-jét\" required>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-primary\">Keresés</button>\r\n    </form>\r\n    <?php if ($patientID > 0 && empty($patientRecords)): ?>\r\n        <div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 10px;\">Nincsenek rekordok ehhez a beteghez.</div>\r\n    <?php endif; ?>\r\n    <?php if (!empty($patientRecords)): ?>\r\n    <table class=\"table table-bordered\" style=\"margin-top: 20px;\">\r\n        <thead>\r\n        <tr>\r\n            <th>Beteg neve</th>\r\n            <th>Eljárás dátuma</th>\r\n            <th>Eljárás részletei</th>\r\n            <th>Megjegyzések</th>\r\n            <th>Eljárás neve</th>\r\n            <th>Ár</th>\r\n        </tr>\r\n        </thead>\r\n        <tbody>\r\n        <?php foreach ($patientRecords as $record): ?>\r\n            <tr>\r\n                <td><?php echo htmlspecialchars($record[\'firstName\'] . \' \' . $record[\'lastName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDate\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureDetails\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'notes\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'procedureName\']); ?></td>\r\n                <td><?php echo htmlspecialchars($record[\'price\']); ?> HUF</td>\r\n            </tr>\r\n        <?php endforeach; ?>\r\n        </tbody>\r\n    </table>\r\n    <?php endif; ?>\r\n</div>\r\n\r\n<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\r\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js\"></script>\r\n</body>\r\n</html>', 6, 9),
-(9, 20, 6, '2024-06-17', 'add', 'asd', 3, 6),
-(10, 20, 6, '2024-06-20', 'asd', 'asd', 4, 4);
+INSERT INTO `PatientRecords` (`recordID`, `patientID`, `doctorID`, `procedureDate`, `procedureDetails`, `notes`, `price`, `procedureID`, `healthRating`) VALUES
+(11, 20, 6, '2023-10-20', 'Fogkő eltávolítás', 'A páciens jól viselte az eljárást.', 40000.00, 5, NULL),
+(12, 20, 6, '2023-12-19', 'Fogkő eltávolítás', 'Kisebb vérzés volt tapasztalható.', 40000.00, 5, NULL),
+(13, 20, 6, '2023-12-19', 'Fogkő eltávolítás', 'Az eljárás zökkenőmentesen zajlott.', 40000.00, 5, NULL),
+(14, 20, 6, '2023-10-06', 'Fogkő eltávolítás', 'Minden rendben volt.', 40000.00, 5, NULL),
+(15, 20, 6, '2023-07-07', 'Fogkő eltávolítás', 'A páciens kényelmesen érezte magát.', 40000.00, 5, NULL),
+(16, 20, 6, '2023-11-13', 'Fogkő eltávolítás', 'Nincs különösebb megjegyzés.', 38000.00, 5, NULL),
+(17, 20, 6, '2024-03-12', 'Fogkő eltávolítás', 'Minden a tervek szerint ment.', 38000.00, 5, NULL),
+(18, 20, 6, '2024-02-03', 'Fogkő eltávolítás', 'A páciens elégedett volt az eredménnyel.', 38000.00, 5, NULL),
+(19, 20, 6, '2024-01-20', 'Fogkő eltávolítás', 'Kisebb érzékenység tapasztalható.', 38000.00, 5, NULL),
+(20, 20, 6, '2023-10-25', 'Fogkő eltávolítás', 'Az eljárás gyorsan lezajlott.', 38000.00, 5, NULL),
+(21, 20, 6, '2023-07-28', 'Fogkő eltávolítás', 'Nem volt komplikáció.', 40000.00, 5, NULL),
+(22, 20, 6, '2024-05-02', 'Fogkő eltávolítás', 'A páciens jól reagált a kezelésre.', 36000.00, 5, NULL),
+(23, 20, 6, '2024-03-16', 'Fogkő eltávolítás', 'Nem volt különösebb probléma.', 36000.00, 5, NULL),
+(24, 20, 6, '2023-07-05', 'Fogkő eltávolítás', 'Az eljárás sikeres volt.', 40000.00, 5, NULL),
+(25, 20, 6, '2024-04-18', 'Fogkő eltávolítás', 'A páciens elégedett volt.', 36000.00, 5, NULL),
+(26, 20, 6, '2023-08-29', 'Fogkő eltávolítás', 'Kisebb fájdalom tapasztalható.', 38000.00, 5, NULL),
+(27, 20, 6, '2023-08-23', 'Fogkő eltávolítás', 'Az eljárás problémamentes volt.', 38000.00, 5, NULL),
+(28, 20, 6, '2023-12-13', 'Fogkő eltávolítás', 'A páciens jól viselte a kezelést.', 36000.00, 5, NULL),
+(29, 20, 6, '2023-12-18', 'Fogkő eltávolítás', 'Minden rendben volt.', 36000.00, 5, NULL),
+(30, 20, 6, '2024-03-19', 'Fogkő eltávolítás', 'Az eljárás zökkenőmentes volt.', 34000.00, 5, NULL);
+
+--
+-- Eseményindítók `PatientRecords`
+--
+DELIMITER $$
+CREATE TRIGGER `apply_discount_before_insert` BEFORE INSERT ON `PatientRecords` FOR EACH ROW BEGIN
+    DECLARE visit_count INT;
+    DECLARE original_price DECIMAL(10, 2);
+    DECLARE discount_percentage DECIMAL(5, 2);
+    
+    -- Get the number of previous visits
+    SELECT COUNT(*)
+    INTO visit_count
+    FROM `PatientRecords`
+    WHERE `patientID` = NEW.`patientID`
+      AND `procedureDate` < NEW.`procedureDate`;
+
+    -- Get the original price of the procedure
+    SELECT `price`
+    INTO original_price
+    FROM `Procedures`
+    WHERE `procedureID` = NEW.`procedureID`;
+
+    -- Determine the discount percentage based on visit count
+    IF visit_count >= 15 THEN
+        SET discount_percentage = 15;
+    ELSEIF visit_count >= 8 THEN
+        SET discount_percentage = 10;
+    ELSEIF visit_count >= 3 THEN
+        SET discount_percentage = 5;
+    ELSE
+        SET discount_percentage = 0;
+    END IF;
+
+    -- Calculate the discounted price
+    SET NEW.`price` = original_price - (original_price * discount_percentage / 100);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -261,7 +317,7 @@ ALTER TABLE `Patient`
 -- AUTO_INCREMENT a táblához `PatientRecords`
 --
 ALTER TABLE `PatientRecords`
-  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT a táblához `Procedures`
