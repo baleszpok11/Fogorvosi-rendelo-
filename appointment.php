@@ -55,15 +55,16 @@ if (!is_null($auth) && $auth !== '') {
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="index.php">Kezdőoldal</a></li> <!-- Az Ön linkei itt -->
-                <li><a href="appointment.php">Időpont foglalás</a></li> <!-- Az Ön linkei itt -->
+                <li><a href="index.php">Kezdőoldal</a></li>
+                <li><a href="doctors.php">Orvosaink</a></li>
+                <li class="active"><a href="appointment.php">Időpont foglalás</a></li>
+                <li><a href="view_appointments.php">Foglalásaim</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"><?php echo $_SESSION['firstName'] . ' ' . $_SESSION['lastName']; ?><span
                                 class="caret"></span></a> <!-- Az Ön neve itt -->
                     <ul class="dropdown-menu">
-                        <li><a href="#">Profil</a></li>
-                        <li><a href="#">Beállítások</a></li>
+                        <li><a href="profile.php">Profil</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
                     </ul>

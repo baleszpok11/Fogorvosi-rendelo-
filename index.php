@@ -54,7 +54,13 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : '';
                 }
                 ?>
                 <li><a href="doctors.php">Orvosaink</a></li>
-                <li><a href="appointment.php">Időpont foglalás</a></li>
+                <?php
+                if(isset($_SESSION['patientID'])) {
+                    echo '<li><a href="appointment.php">Időpont foglalás</a></li>';
+                    echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
+                    echo '<li><a href="view_my_records.php">Kartonom</a></li>';
+                }
+                ?>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
@@ -85,6 +91,26 @@ $messageType = isset($_GET['type']) ? $_GET['type'] : '';
     <?php endif; ?>
 </div>
 
-<!-- Other content of your index page -->
+<div class="container">
+    <h1>Fogorvosi kezelések</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Eljárás</th>
+            <th>Ár</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        require 'functions/db-config.php';
+        global $conn;
+        $result = $conn->query("SELECT procedureName, price FROM Procedures");
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td>{$row['procedureName']}</td><td>{$row['price']} Ft</td></tr>";
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

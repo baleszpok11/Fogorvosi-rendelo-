@@ -70,8 +70,11 @@ if ($result->num_rows > 0) {
                 if (isset($_SESSION['doctorID'])) {
                     echo '<li><a href="add_patient_records.php">Karton</a></li>';
                 }
+                if(isset($_SESSION['patientID'])) {
+                    echo '<li><a href="appointment.php">Időpont foglalás</a></li>';
+                    echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
+                }
                 ?>
-                <li><a href="appointment.php">Időpont foglalás</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
