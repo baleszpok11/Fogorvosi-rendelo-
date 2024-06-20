@@ -69,7 +69,7 @@ include 'functions/db-config.php';
 </div>
 <div>
     <h2>Szolgáltatás törlése</h2>
-    <form action="functions/delete_service.php">
+    <form action="functions/delete_service.php" method="post">
         <label for="procedureID">Szolgáltatás ID:</label>
         <input type="number" id="procedureID" name="procedureID" required><br><br>
         <input type="submit" value="Törlés">
