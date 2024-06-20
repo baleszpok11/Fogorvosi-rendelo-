@@ -1,7 +1,7 @@
 <?php
+global $pdo;
 session_start();
 require 'db-config.php';
-global $conn;
 
 if (!isset($_SESSION['patientID'])) {
     header("Location: ../login.php");
@@ -17,11 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $appointment_time = $_POST['appointment_time'];
 
     // Ellenőrizze, hogy a kiválasztott nap a doktor munkanapja-e
-    $stmt = $conn->prepare("SELECT Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday FROM DoctorSchedule WHERE doctorID = ?");
-    $stmt->bind_param("i", $doctor_id);
+    $stmt = $pdo->prepare("SELECT Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday FROM DoctorSchedule WHERE doctorID = :doctor_id");
+    $stmt->bindParam(':doctor_id', $doctor_id);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $schedule = $result->fetch_assoc();
+    $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$schedule) {
         $message = 'Az orvos ütemezése nem található.';
@@ -38,11 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Ellenőrizze, hogy a kiválasztott időpont az orvos munkaidején belül van-e
-    $stmt2 = $conn->prepare("SELECT worktime FROM Doctor WHERE doctorID = ?");
-    $stmt2->bind_param("i", $doctor_id);
+    $stmt2 = $pdo->prepare("SELECT worktime FROM Doctor WHERE doctorID = :doctor_id");
+    $stmt2->bindParam(':doctor_id', $doctor_id);
     $stmt2->execute();
-    $result2 = $stmt2->get_result();
-    $doctor = $result2->fetch_assoc();
+    $doctor = $stmt2->fetch(PDO::FETCH_ASSOC);
 
     if (!$doctor) {
         $message = 'Az orvos nem található.';
@@ -63,14 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Időpont beillesztése az adatbázisba
     $appointment_datetime = date('Y-m-d H:i:s', strtotime("$appointment_day $appointment_time"));
-    $stmt3 = $conn->prepare("INSERT INTO Appointment (schedule, doctorID, patientID, procedureID) VALUES (?, ?, ?, ?)");
-    $stmt3->bind_param("siii", $appointment_datetime, $doctor_id, $user_id, $procedure_id);
+    $stmt3 = $pdo->prepare("INSERT INTO Appointment (schedule, doctorID, patientID, procedureID) VALUES (:schedule, :doctor_id, :patient_id, :procedure_id)");
+    $stmt3->bindParam(':schedule', $appointment_datetime);
+    $stmt3->bindParam(':doctor_id', $doctor_id);
+    $stmt3->bindParam(':patient_id', $user_id);
+    $stmt3->bindParam(':procedure_id', $procedure_id);
 
     try {
         $stmt3->execute();
         $message = 'Az időpont sikeresen lefoglalva.';
         header("Location: ../appointment.php?message=" . urlencode($message));
-    } catch (mysqli_sql_exception $e) {
+    } catch (PDOException $e) {
         if ($e->getCode() == 1062) { // Ismétlődő bejegyzés hibakód
             $message = 'Az időpont már foglalt.';
             header("Location: ../appointment.php?message=" . urlencode($message));
@@ -86,3 +87,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ../appointment.php?message=" . urlencode($message));
     exit();
 }
+?>

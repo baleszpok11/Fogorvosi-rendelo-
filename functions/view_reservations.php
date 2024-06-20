@@ -1,14 +1,15 @@
 <?php
 include '../functions/db-config.php';
-global $conn;
+global $pdo;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = isset($_POST['date']) ? $_POST['date'] : null;
 
     if (!empty($date)) {
         try {
             // Prepare the SQL query to fetch bookings for the selected date
-            $stmt = $conn->prepare("SELECT * FROM Appointment WHERE DATE(schedule) = :date");
-            $stmt->bindParam(':date', $date);
+            $stmt = $pdo->prepare("SELECT * FROM Appointment WHERE DATE(schedule) = :date");
+            $stmt->bindParam(':date', $date, PDO::PARAM_STR);
             $stmt->execute();
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -45,4 +46,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo "Invalid request.";
 }
-
+?>

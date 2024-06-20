@@ -1,31 +1,36 @@
 <?php
-session_start();
+global $pdo;
+include 'db-config.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['doctorID'])) {
-    require 'db-config.php';
-    global $conn;
-    $doctorID = $_SESSION['doctorID'];
-    $patientID = trim($_POST['patientID']);
-    $procedureDate = trim($_POST['procedureDate']);
-    $procedureDetails = trim($_POST['procedureDetails']);
-    $notes = trim($_POST['notes']);
-    $procedureID = trim($_POST['procedure_id']);
-    $healthRating = trim($_POST['healthRating']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $patientID = isset($_POST["patientID"]) ? intval($_POST["patientID"]) : null;
+    $recordDate = isset($_POST["recordDate"]) ? $_POST["recordDate"] : null;
+    $description = isset($_POST["description"]) ? $_POST["description"] : null;
+    $procedureID = isset($_POST["procedureID"]) ? intval($_POST["procedureID"]) : null;
 
-    try {
-        $stmt = $conn->prepare("INSERT INTO PatientRecords (patientID, doctorID, procedureDate, procedureDetails, notes, procedureID, healthRating) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iisssii", $patientID, $doctorID, $procedureDate, $procedureDetails, $notes, $procedureID, $healthRating);
-    }
-    catch(Exception $e) {
-        header("Location: ../add_patient_records.php?message=" . urlencode("Hiba történt a kezelési adat hozzáadása közben: " . $e->getMessage()));
-    }
-    if ($stmt->execute()) {
-        header("Location: ../add_patient_records.php?message=" . urlencode("Kezelési adat sikeresen hozzáadva.") . "&type=success");
+    if ($patientID && $recordDate && $description && $procedureID) {
+        try {
+            $sql = $pdo->prepare("INSERT INTO PatientRecords (patientID, recordDate, description, procedureID) VALUES (:patientID, :recordDate, :description, :procedureID)");
+            $sql->bindParam(':patientID', $patientID);
+            $sql->bindParam(':recordDate', $recordDate);
+            $sql->bindParam(':description', $description);
+            $sql->bindParam(':procedureID', $procedureID);
+
+            if ($sql->execute()) {
+                echo "New patient record created successfully.";
+            } else {
+                echo "Error: Unable to execute the query.";
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     } else {
-        header("Location: ../add_patient_records.php?message=" . urlencode("Hiba történt a kezelési adat hozzáadása közben: " . $stmt->error));
+        echo "All fields are required.";
     }
 } else {
-    header("Location: ../index.php?message=Nem jogosult a művelet végrehajtására.");
-    exit();
+    echo "No form submitted.";
 }
+
+$pdo = null;
+header("Location: ../admin.php");
 ?>

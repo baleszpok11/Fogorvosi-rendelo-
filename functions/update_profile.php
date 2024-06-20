@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $patientID = $_SESSION['patientID'];
 
     require 'db-config.php';
-    global $conn;
+    global $pdo;
 
     $sql = "UPDATE Patient SET ";
 
@@ -37,33 +37,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         }
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-        $updates[] = "password = '" . $hashedPassword . "'";
+        $updates[] = "password = :password";
     }
 
     if (!empty($phoneNumber)) {
-        $updates[] = "phoneNumber = '" . $conn->real_escape_string($phoneNumber) . "'";
+        $updates[] = "phoneNumber = :phoneNumber";
     }
 
     if (!empty($email)) {
-        $updates[] = "email = '" . $conn->real_escape_string($email) . "'";
+        $updates[] = "email = :email";
     }
 
     if (!empty($updates)) {
         $sql .= implode(", ", $updates);
-        $sql .= " WHERE patientID = " . intval($patientID);
+        $sql .= " WHERE patientID = :patientID";
 
-        if ($conn->query($sql) === TRUE) {
-            $response["success"] = true;
-            $response["message"] = "Profil sikeresen frissítve.";
-        } else {
-            $response["message"] = "Hiba történt a profil frissítése közben: " . $conn->error;
+        try {
+            $stmt = $pdo->prepare($sql);
+
+            if (!empty($newPassword)) {
+                $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+            }
+            if (!empty($phoneNumber)) {
+                $stmt->bindParam(':phoneNumber', $phoneNumber, PDO::PARAM_STR);
+            }
+            if (!empty($email)) {
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            }
+            $stmt->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                $response["success"] = true;
+                $response["message"] = "Profil sikeresen frissítve.";
+            } else {
+                $response["message"] = "Hiba történt a profil frissítése közben: " . implode(" ", $stmt->errorInfo());
+            }
+        } catch (PDOException $e) {
+            $response["message"] = "Hiba történt a profil frissítése közben: " . $e->getMessage();
         }
     }
-
-    $conn->close();
 } else {
     $response["message"] = "Érvénytelen kérés.";
 }
 
 echo json_encode($response);
-
+?>

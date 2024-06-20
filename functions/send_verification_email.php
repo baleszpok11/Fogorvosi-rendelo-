@@ -44,3 +44,4 @@ function send_verification_email($email, $token) {
         return false;
     }
 }
+?>
