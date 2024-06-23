@@ -59,9 +59,20 @@ if (!is_null($auth) && $auth !== '') {
                 <?php else: ?>
                     <?php
                     if (isset($_SESSION['patientID'])) {
-                        echo '<li class="active"><a href="appointment.php">Időpont foglalás</a></li>';
+                        echo '<li><a href="appointment.php">Időpont foglalás</a></li>';
                         echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
                         echo '<li><a href="view_my_records.php">Kartonom</a></li>';
+                        echo '<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">';
+                        echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']);
+                        echo ' <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="functions/logOutFunction.php">Profil</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
+                        </ul>
+                    </li>';
                     }
                     if (isset($_SESSION['doctorID'])) {
                         echo '<li><a href="add_patient_records.php">Karton írása</a></li>';
@@ -69,18 +80,17 @@ if (!is_null($auth) && $auth !== '') {
                         echo '<li><a href="view_patient_health.php">Fogak állapota</a></li>';
                         echo '<li><a href="view_appointments.php">Foglalásaim</a></li>';
                         echo '<li><a href="admin.php">Admin oldal</a></li>';
-                    }
-                    ?>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span
-                                    class="caret"></span>
-                        </a>
+                        echo '<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false">';
+                        echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']);
+                        echo ' <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
                         </ul>
-                    </li>
+                    </li>';
+                    }
+                    ?>
                 <?php endif; ?>
             </ul>
         </div>
