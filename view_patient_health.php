@@ -91,7 +91,7 @@ session_start();
 
         function drawChart(labels, scores) {
             var ctx = document.getElementById('healthChart').getContext('2d');
-            labels.sort(); // Sort labels (dates) in ascending order
+            labels.sort();
             var sortedScores = [];
             labels.forEach((label, index) => {
                 sortedScores.push(scores[index]);

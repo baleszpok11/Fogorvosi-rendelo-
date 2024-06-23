@@ -20,7 +20,6 @@ function send_verification_email($email, $token)
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
 
-        // Disable SSL certificate verification
         $mail->SMTPOptions = array(
             'ssl' => array(
                 'verify_peer' => false,
@@ -29,7 +28,6 @@ function send_verification_email($email, $token)
             )
         );
 
-        // Recipients
         $mail->setFrom('balogbalesz1234@gmail.com', 'Balint');
         $mail->addAddress($email);
 

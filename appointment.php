@@ -5,19 +5,15 @@ if (!isset($_SESSION["patientID"])) {
     exit();
 }
 
-// Include database configuration
 require 'functions/db-config.php';
 global $pdo;
 
-// Get the current user's patientID from the session
 $patientID = $_SESSION['patientID'];
 
-// Query the database to check the 'auth' attribute
 $stmt = $pdo->prepare("SELECT auth FROM Patient WHERE patientID = ?");
 $stmt->execute([$patientID]);
 $auth = $stmt->fetchColumn();
 
-// If 'auth' is not NULL, redirect to index.php
 if (!is_null($auth) && $auth !== '') {
     header("location: index.php?message=" . urlencode("Kérjük, erősítse meg az email címét a folytatáshoz.") . "&type=alert");
     exit();
@@ -214,27 +210,35 @@ if (!is_null($auth) && $auth !== '') {
                             maxDate: new Date().fp_incr(30) // 1 month in the future
                         });
 
-                        $('#appointment_day').change(function () {
-                            var selectedDate = $(this).val();
-                            $.ajax({
-                                url: 'functions/get_booked_times.php',
-                                type: 'GET',
-                                data: {doctor_id: doctorId, date: selectedDate},
-                                dataType: 'json',
-                                success: function (data) {
-                                    var bookedSlotsTable = $('#bookedSlots');
-                                    bookedSlotsTable.empty();
+                        $(document).ready(function () {
+                            $('#appointment_day').change(function () {
+                                var doctorId = $('#doctor').val(); // Make sure you have the doctor ID selected
+                                var selectedDate = $(this).val();
+                                $.ajax({
+                                    url: 'functions/get_booked_times.php',
+                                    type: 'GET',
+                                    data: {doctor_id: doctorId, date: selectedDate},
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        var bookedSlotsTable = $('#bookedSlots');
+                                        bookedSlotsTable.empty();
 
-                                    if (data && data.length > 0) {
-                                        data.forEach(function (slot) {
-                                            bookedSlotsTable.append('<tr><td>' + slot + '</td></tr>');
-                                        });
-                                    } else {
-                                        bookedSlotsTable.append('<tr><td colspan="3">Nincsenek foglalt időpontok erre a napra.</td></tr>');
+                                        if (data && data.length > 0) {
+                                            data.forEach(function (slot) {
+                                                bookedSlotsTable.append('<tr><td>' + slot + '</td></tr>');
+                                            });
+                                        } else {
+                                            bookedSlotsTable.append('<tr><td colspan="3">Nincsenek foglalt időpontok erre a napra.</td></tr>');
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error(xhr.responseText);
+                                        alert('Hiba történt a foglalt időpontok lekérdezése közben. Kérjük, próbálja újra.');
                                     }
-                                }
+                                });
                             });
                         });
+
                     }
                 });
             } else {

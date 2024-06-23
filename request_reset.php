@@ -1,28 +1,11 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Bejelentkezés</title>
-    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="icon" type="image/x-icon" href="source/images/favicon_io/favicon-16x16.png">
-    <style>
-        body {
-            padding-top: 70px;
-        }
-
-        .alert-container {
-            margin-top: 20px;
-        }
-    </style>
+    <title>Jelszó visszaállítás kérése</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
 </head>
 <body>
-
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -42,7 +25,7 @@ session_start();
                 <li><a href="doctors.php">Orvosaink</a></li>
                 <?php if (!isset($_SESSION['patientID']) && !isset($_SESSION['doctorID'])): ?>
                     <li><a href="register.php">Regisztráció</a></li>
-                    <li class="active"><a href="login.php">Bejelentkezés</a></li>
+                    <li><a href="login.php">Bejelentkezés</a></li>
                 <?php else: ?>
                     <?php
                     if (isset($_SESSION['patientID'])) {
@@ -62,11 +45,9 @@ session_start();
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">
                             <?php echo htmlspecialchars($_SESSION['firstName'] . ' ' . $_SESSION['lastName']); ?> <span
-                                    class="caret"></span>
+                                class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="profile.php">Profil</a></li>
-                            <li role="separator" class="divider"></li>
                             <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
                         </ul>
                     </li>
@@ -75,49 +56,21 @@ session_start();
         </div>
     </div>
 </nav>
-<div class="container">
-    <h1>Bejelentkezés</h1>
-    <form id="loginForm" action="functions/logFunction.php" method="post">
+<div class="container" style="padding-top: 70px;">
+    <h2>Jelszó visszaállítás kérése</h2>
+    <?php if (isset($_GET['message'])): ?>
+        <div class="alert alert-info"><?php echo htmlspecialchars($_GET['message']); ?></div>
+    <?php endif; ?>
+    <form method="POST" action="functions/send_reset_email.php">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+            <label for="email">Email cím:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
-        <div class="form-group">
-            <label for="password">Jelszó:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Jelszó" required>
-        </div>
-        <div class="form-group">
-            <label for="role">Szerep:</label>
-            <select class="form-control" id="role" name="role" required>
-                <option value="user">Felhasználó</option>
-                <option value="doctor">Orvos</option>
-            </select>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" id="remember_me" name="remember_me"> Bejelentkezve maradok</label>
-        </div>
-        <a href="request_reset.php">Elfelejtette jelszavát?</a>
-        <br>
-        <br>
-        <button type="submit" class="btn btn-primary">Bejelentkezés</button>
+        <button type="submit" class="btn btn-primary">Küldés</button>
     </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function () {
-        $('#loginForm').submit(function (e) {
-            var role = $('#role').val();
-            if (role === 'doctor') {
-                $(this).attr('action', 'functions/logDoctor.php');
-            } else {
-                $(this).attr('action', 'functions/logFunction.php');
-            }
-        });
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

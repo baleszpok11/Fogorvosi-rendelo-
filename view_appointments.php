@@ -79,52 +79,54 @@ global $pdo;
 
 <div class="container">
     <h1>Foglalásaim</h1>
+    <?php if (isset($_GET['message'])): ?>
+        <div class="alert alert-info"><?php echo htmlspecialchars($_GET['message']); ?></div>
+    <?php endif; ?>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Dátum</th>
-            <th>Időpont</th>
+            <th
+                    Időpont
+            </th>
             <th>Orvos</th>
             <th>Eljárás</th>
+            <th>Műveletek</th>
         </tr>
         </thead>
         <tbody>
         <?php
         if (isset($_SESSION['patientID'])) {
             $patientID = $_SESSION["patientID"];
-            $sql = "SELECT a.schedule, d.firstName, d.lastName, p.procedureName 
-                    FROM Appointment a 
-                    JOIN Doctor d ON a.doctorID = d.doctorID 
-                    JOIN Procedures p ON a.procedureID = p.procedureID 
-                    WHERE a.patientID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
+            $sql = "SELECT a.appID, a.schedule, d.firstName, d.lastName, p.procedureName FROM Appointment a JOIN Doctor d ON a.doctorID = d.doctorID JOIN Procedures p ON a.procedureID = p.procedureID WHERE a.patientID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$patientID]);
             $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         if (isset($_SESSION['doctorID'])) {
             $doctorID = $_SESSION["doctorID"];
-            $sql = "SELECT a.schedule, pa.firstName, pa.lastName, p.procedureName 
-                    FROM Appointment a 
-                    JOIN Patient pa ON a.patientID = pa.patientID 
-                    JOIN Procedures p ON a.procedureID = p.procedureID 
-                    WHERE a.doctorID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
+            $sql = "SELECT a.appID, a.schedule, pa.firstName, pa.lastName, p.procedureName FROM Appointment a JOIN Patient pa ON a.patientID = pa.patientID JOIN Procedures p ON a.procedureID = p.procedureID WHERE a.doctorID = ? AND a.schedule > NOW() ORDER BY a.schedule ASC";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$doctorID]);
             $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-
         foreach ($appointments as $appointment) {
             echo "<tr>";
             echo "<td>" . date('Y-m-d', strtotime($appointment['schedule'])) . "</td>";
             echo "<td>" . date('H:i', strtotime($appointment['schedule'])) . "</td>";
             echo "<td>" . htmlspecialchars($appointment['firstName'] . ' ' . $appointment['lastName']) . "</td>";
             echo "<td>" . htmlspecialchars($appointment['procedureName']) . "</td>";
+            echo "<td>
+                <form method='post' action='functions/delete_appointment.php' style='display:inline;'>
+                    <input type='hidden' name='appID' value='" . $appointment['appID'] . "'>
+                    <button type='submit' class='btn btn-danger btn-sm'>Törlés</button>
+                </form>
+              </td>";
             echo "</tr>";
         }
         ?>
         </tbody>
     </table>
 </div>
-
 </body>
 </html>
