@@ -2,6 +2,27 @@
 session_start();
 $message = $_GET['message'] ?? '';
 $messageType = $_GET['type'] ?? 'info';
+
+require 'functions/db-config.php';
+global $pdo;
+
+if (isset($_COOKIE['remember_me'])) {
+    $token = $_COOKIE['remember_me'];
+
+    $stmt = $pdo->prepare("SELECT patientID FROM Patient WHERE remember_token = :token");
+    $stmt->execute([':token' => $token]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $stmt2 = $pdo->prepare("SELECT doctorID FROM Doctor WHERE remember_token = :token");
+    $stmt2->execute([':token' => $token]);
+    $doctor = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+    if ($doctor) {
+        $_SESSION['doctorID'] = $doctor['doctorID'];
+    } else {
+        setcookie('remember_me', '', time() - 3600, "/", "", false, true);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,6 +86,11 @@ $messageType = $_GET['type'] ?? 'info';
                                     class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <?php
+                            if(isset($_SESSION['patientID'])) {
+                                echo '<li><a href="profile.php">Profil</a></li>"';
+                            }
+                            ?>
                             <li><a href="functions/logOutFunction.php">Kijelentkezés</a></li>
                         </ul>
                     </li>
@@ -88,8 +114,6 @@ $messageType = $_GET['type'] ?? 'info';
         </thead>
         <tbody>
         <?php
-        require 'functions/db-config.php';
-        global $pdo;
         try {
             $stmt = $pdo->query("SELECT procedureName, price FROM Procedures");
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

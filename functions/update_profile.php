@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $updates = [];
     if (!empty($newPassword)) {
-        // Validate password
         if (!preg_match('/^(?=.*[!@#$%^&*()_+{}\[\]:;"\'<>,.?\/])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/', $newPassword)) {
             $response["message"] = "A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell egy speciális karaktert, egy számot és egy nagybetűt.";
             echo json_encode($response);
@@ -81,4 +80,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 echo json_encode($response);
-?>
